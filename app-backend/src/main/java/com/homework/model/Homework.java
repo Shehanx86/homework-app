@@ -1,4 +1,4 @@
-package Model;
+package com.homework.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +18,7 @@ public class Homework {
     String id;
     String title;
     String objectives;
-    Date divenDate;
+    Date givenDate;
     Date deadline;
+
 }
