@@ -15,10 +15,11 @@ import java.util.Date;
 public class Homework {
 
     @Id
-    String id;
-    String title;
-    String objectives;
-    Date givenDate;
-    Date deadline;
+    private String id;
+    private String title;
+    private String objectives;
+    private Date createdAt;
+    private Date deadline;
+    private Date lastUpdatedAt;
 
 }

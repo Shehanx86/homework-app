@@ -4,64 +4,92 @@ import com.homework.app.AppApplication;
 import com.homework.model.Homework;
 import com.homework.respository.HomeworkRepository;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.ContextConfiguration;
+import java.util.Arrays;
+import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataMongoTest
 @ContextConfiguration(classes = AppApplication.class)
 class ServiceImplTest {
 
-    @Autowired
-    HomeworkRepository repositoryTest;
+    @Mock
+    private HomeworkRepository homeworkRepositoryTest;
 
-    Homework homework_1 = new Homework(
-            "1",
-            "title_1",
-            "objective_1",
-            new Date(),
-            new Date());
+    private ServiceImpl service;
 
     @BeforeEach
-    void setUp() {
-        repositoryTest.save(homework_1);
-    }
-
-    @AfterEach
-    void tearDown(){
-        repositoryTest.deleteAll();
+    void initUseCase(){
+        service = new ServiceImpl(homeworkRepositoryTest);
     }
 
     @Test
-    @DisplayName("This tests if homework is created")
-    void saveHomeworkTest() {
-        assertEquals(repositoryTest.save(homework_1), homework_1);
-    }
-
-    @Test
-    @DisplayName("This tests if homework were saved")
-    void getAllHomeworksTest() {
-        assertFalse((repositoryTest.findAll()).isEmpty());
-    }
-
-    @Test
-    @DisplayName("This tests if findById works as expected")
+    @DisplayName("This tests getHomeworkById service method")
     void getHomeworkByIdTest(){
-        assertAll("Testing fields in object",
-                () -> assertEquals(homework_1.getTitle(), repositoryTest.findById("1").get().getTitle()),
-                () -> assertEquals(homework_1.getDeadline(), repositoryTest.findById("1").get().getDeadline()),
-                () -> assertEquals(homework_1.getObjectives(), repositoryTest.findById("1").get().getObjectives()),
-                () -> assertEquals(homework_1.getGivenDate(), repositoryTest.findById("1").get().getGivenDate()));
+
+        Homework homework = new Homework();
+        homework.setId("test_id");
+        homework.setTitle("test_title");
+        homework.setObjectives("test_objectives");
+
+        doReturn(Optional.of(homework)).when(homeworkRepositoryTest).findById("test_id");
+
+        assertEquals(Optional.of(homework), service.getHomeworkById("test_id"));
     }
 
     @Test
-    @DisplayName("This tests if homework is deleted by id")
-    void deleteHomeworkById(){
-        repositoryTest.deleteById("1");
-        assertTrue((repositoryTest.findAll()).isEmpty());
+    @DisplayName("This tests getAllHomework service method")
+    void getAllHomeworkTest(){
+
+        Homework homework = new Homework();
+        homework.setId("test_id");
+        homework.setTitle("test_title");
+        homework.setObjectives("test_objectives");
+
+        doReturn(Arrays.asList(homework)).when(homeworkRepositoryTest).findAll();
+
+        assertEquals(Arrays.asList(homework), service.getAllHomeworks());
     }
+
+    @Test
+    @DisplayName("This tests addHomework service method")
+    void addHomeworkServiceMethodTest(){
+
+        Homework homework = new Homework();
+        homework.setId("test_id");
+        homework.setTitle("test_title");
+        homework.setObjectives("test_objectives");
+
+        doReturn(homework).when(homeworkRepositoryTest).save(any(Homework.class));
+
+        assertEquals(homework, service.addHomework(homework));
+    }
+
+    @Test
+    @DisplayName("This tests changeHomeworkById service method")
+    void changeHomeworkByIdTest(){
+
+        Homework homework = new Homework();
+        homework.setId("test_id");
+        homework.setTitle("test_title");
+        homework.setObjectives("test_objectives");
+
+        doReturn(Optional.of(homework)).when(homeworkRepositoryTest).findById("test_id");
+        doReturn(homework).when(homeworkRepositoryTest).save(any(Homework.class));
+
+        assertEquals(homework, service.changeHomeworkById(homework,"test_id"));
+
+    }
+
+    @Test
+    @DisplayName("This deleteHomework service method")
+    void deleteHomework(){
+        assertEquals("Homework test_id deleted", service.deleteHomework("test_id"));
+    }
+
 }
