@@ -33,20 +33,27 @@ public class ServiceImpl implements IService{
 
     public Homework changeHomeworkById(Homework newHomework, String id){
 
-        Homework updatedHomework = hwRepository.findById(id).get();
-        updatedHomework.setLastUpdatedAt(new Date());
+        Optional<Homework> currentTomework = hwRepository.findById(id);
+        Homework updatedHomework;
 
-        if(newHomework.getTitle() != null){
-            updatedHomework.setTitle(newHomework.getTitle());
-        }
-        if(newHomework.getDeadline() != null){
-            updatedHomework.setDeadline(newHomework.getDeadline());
-        }
-        if(newHomework.getObjectives() != null){
-            updatedHomework.setObjectives(newHomework.getObjectives());
-        }
+        if(currentTomework.isPresent()){
+            updatedHomework = currentTomework.get();
+            updatedHomework.setLastUpdatedAt(new Date());
 
-        return hwRepository.save(updatedHomework);
+            if(newHomework.getTitle() != null){
+                updatedHomework.setTitle(newHomework.getTitle());
+            }
+            if(newHomework.getDeadline() != null){
+                updatedHomework.setDeadline(newHomework.getDeadline());
+            }
+            if(newHomework.getObjectives() != null){
+                updatedHomework.setObjectives(newHomework.getObjectives());
+            }
+
+            return hwRepository.save(updatedHomework);
+        } else {
+            return null;
+        }
     }
 
     public String deleteHomework(String id) {
