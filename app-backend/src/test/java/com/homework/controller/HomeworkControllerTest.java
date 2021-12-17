@@ -40,7 +40,7 @@ class HomeworkControllerTest {
 
     @Test
     @DisplayName("This tests api/homework get request")
-    public void getAllHomeworkTest() throws Exception {
+    void getAllHomeworkTest() throws Exception {
 
         doReturn(Arrays.asList(homework)).when(service).getAllHomeworks();
 
@@ -51,7 +51,7 @@ class HomeworkControllerTest {
 
     @Test
     @DisplayName("This tests api/homework/id get request")
-    public void getHomeworkByIdTest() throws Exception {
+    void getHomeworkByIdTest() throws Exception {
 
         doReturn(Optional.of(homework)).when(service).getHomeworkById("test_id");
 
@@ -62,7 +62,7 @@ class HomeworkControllerTest {
 
     @Test
     @DisplayName("This tests api/homework/id post request")
-    public void addHomeworkTest() throws Exception {
+    void addHomeworkTest() throws Exception {
 
         doReturn(homework).when(service).addHomework(homework);
 
@@ -77,7 +77,7 @@ class HomeworkControllerTest {
 
     @Test
     @DisplayName("This tests api/homework/id put request")
-    public void changeHomeworkTest() throws Exception {
+    void changeHomeworkTest() throws Exception {
 
         doReturn(homework).when(service).changeHomeworkById(homework, "test_id");
 
@@ -94,7 +94,7 @@ class HomeworkControllerTest {
 
     @Test
     @DisplayName("This tests api/homework/id delete request")
-    public void deleteHomeworkTest() throws Exception {
+    void deleteHomeworkTest() throws Exception {
 
         doReturn("Homework test_id deleted").when(service).deleteHomework("test_id");
 
@@ -104,7 +104,7 @@ class HomeworkControllerTest {
     }
 
 
-    public static String asJsonString(final Object obj) {
+    static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
         } catch (Exception e) {
