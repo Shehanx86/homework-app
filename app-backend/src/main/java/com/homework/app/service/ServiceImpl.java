@@ -1,7 +1,7 @@
-package com.homework.service;
+package com.homework.app.service;
 
-import com.homework.model.Homework;
-import com.homework.respository.HomeworkRepository;
+import com.homework.app.model.Homework;
+import com.homework.app.respository.HomeworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;

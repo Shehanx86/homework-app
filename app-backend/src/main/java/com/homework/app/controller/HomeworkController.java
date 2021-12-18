@@ -1,7 +1,7 @@
-package com.homework.controller;
+package com.homework.app.controller;
 
-import com.homework.model.Homework;
-import com.homework.service.ServiceImpl;
+import com.homework.app.model.Homework;
+import com.homework.app.service.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

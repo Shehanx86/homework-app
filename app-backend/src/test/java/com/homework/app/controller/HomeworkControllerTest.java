@@ -1,7 +1,7 @@
-package com.homework.controller;
+package com.homework.app.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homework.model.Homework;
-import com.homework.service.ServiceImpl;
+import com.homework.app.model.Homework;
+import com.homework.app.service.ServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest(HomeworkController.class)
-@ContextConfiguration(classes = HomeworkController.class)
 class HomeworkControllerTest {
 
     @Autowired
