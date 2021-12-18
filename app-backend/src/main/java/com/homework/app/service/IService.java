@@ -1,6 +1,6 @@
-package com.homework.service;
+package com.homework.app.service;
 
-import com.homework.model.Homework;
+import com.homework.app.model.Homework;
 
 import java.util.List;
 import java.util.Optional;

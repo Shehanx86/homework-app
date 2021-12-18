@@ -1,12 +1,11 @@
-package com.homework.service;
+package com.homework.app.service;
 
-import com.homework.app.AppApplication;
-import com.homework.model.Homework;
-import com.homework.respository.HomeworkRepository;
+
+import com.homework.app.model.Homework;
+import com.homework.app.respository.HomeworkRepository;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.test.context.ContextConfiguration;
 import java.util.Arrays;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +14,6 @@ import static org.mockito.Mockito.doReturn;
 
 
 @DataMongoTest
-@ContextConfiguration(classes = AppApplication.class)
 class ServiceImplTest {
 
     @Mock
