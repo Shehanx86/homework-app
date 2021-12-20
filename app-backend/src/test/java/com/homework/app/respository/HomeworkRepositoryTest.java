@@ -1,5 +1,6 @@
 package com.homework.app.respository;
 
+import com.homework.app.AppApplication;
 import com.homework.app.model.Homework;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+
 import java.util.Date;
 import java.util.Optional;
 
