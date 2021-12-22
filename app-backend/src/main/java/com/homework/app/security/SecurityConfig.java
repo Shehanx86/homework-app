@@ -7,14 +7,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.homework.app.util.Util.*;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -22,10 +23,11 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -34,21 +36,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
-        customAuthenticationFilter.setFilterProcessesUrl("/api/login");
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
 
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
 
-        http.authorizeRequests().antMatchers(GET, "api/login/**", "api/token/refresh/**").permitAll();
-        http.authorizeRequests().antMatchers(GET, "api/homework/**").hasAnyAuthority(VIEWER);
-        http.authorizeRequests().antMatchers(POST, "api/homework/**").hasAnyAuthority(ADMIN, EDITOR);
-        http.authorizeRequests().antMatchers(PUT, "api/homework/**").hasAnyAuthority(ADMIN, EDITOR);
-        http.authorizeRequests().antMatchers(DELETE, "api/homework/**").hasAnyAuthority(ADMIN, EDITOR);
+        http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**", "/api/test/**").permitAll();
+        http.authorizeRequests().antMatchers(GET, "api/homework").hasAnyAuthority("teacher", "student");
+        http.authorizeRequests().antMatchers(POST, "api/homework/**").hasAnyAuthority("teacher");
+        http.authorizeRequests().antMatchers(PUT, "api/homework/**").hasAnyAuthority("teacher");
+        http.authorizeRequests().antMatchers(DELETE, "api/homework/**").hasAnyAuthority("teacher");
+        http.authorizeRequests().antMatchers( "api/users/**").hasAnyAuthority("teacher");
         http.authorizeRequests().anyRequest().authenticated();
 
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+
     }
 
     @Bean
@@ -56,4 +59,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
 }

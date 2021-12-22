@@ -7,13 +7,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+
 import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataMongoTest
-class HomeworkRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     private HomeworkRepository repositoryTest;
@@ -27,7 +28,7 @@ class HomeworkRepositoryTest {
                 "title_1",
                 "objective_1",
                 new Date(),
-                "status",
+                "finished",
                 new Date(),
                 new Date());
 

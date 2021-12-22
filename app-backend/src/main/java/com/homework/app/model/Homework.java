@@ -19,6 +19,7 @@ public class Homework {
     private String title;
     private String objectives;
     private Date createdAt;
+    private String status;
     private Date deadline;
     private Date lastUpdatedAt;
 
