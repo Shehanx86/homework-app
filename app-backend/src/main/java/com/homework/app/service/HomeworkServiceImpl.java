@@ -2,6 +2,7 @@ package com.homework.app.service;
 
 import com.homework.app.model.Homework;
 import com.homework.app.respository.HomeworkRepository;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;
@@ -9,12 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ServiceImpl implements IService{
+@NoArgsConstructor
+public class HomeworkServiceImpl implements IHomeworkService {
 
     HomeworkRepository hwRepository;
 
     @Autowired
-    ServiceImpl(HomeworkRepository hwRepository){
+    HomeworkServiceImpl(HomeworkRepository hwRepository){
         this.hwRepository = hwRepository;
     }
 
@@ -29,6 +31,17 @@ public class ServiceImpl implements IService{
     public Homework addHomework(Homework homework){
         homework.setCreatedAt(new Date());
         return hwRepository.save(homework);
+    }
+
+    public Homework changeHomeworkStatus(String status, String id){
+        Optional<Homework> homework= hwRepository.findById(id);
+        if(homework.isPresent()){
+            Homework updatedHomework = homework.get();
+            updatedHomework.setStatus(status);
+            return hwRepository.save(updatedHomework);
+        } else {
+            return null;
+        }
     }
 
     public Homework changeHomeworkById(Homework newHomework, String id){
