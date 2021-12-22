@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Date;
 
+import static javax.servlet.http.HttpServletResponse.*;
 import static com.homework.app.util.UtilJWT.CLAIM;
 import static com.homework.app.util.UtilJWT.createToken;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,16 +34,22 @@ class AuthControllerTest {
 
     private MockMvc mockMvc;
 
-    String refresh_token= createToken(
+    @MockBean
+    RefreshTokenService refreshTokenService;
+
+    @MockBean
+    AuthenticationService authenticationService;
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    private String refresh_token= createToken(
             "user_test",
             new Date(System.currentTimeMillis() + 30 * 10 * 1000),
             "test_issuer",
             CLAIM,
             Arrays.asList("teacher")
     );
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
 
     @BeforeEach()
     public void setup()
@@ -51,15 +58,8 @@ class AuthControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @MockBean
-    RefreshTokenService refreshTokenService;
-
-    @MockBean
-    AuthenticationService authenticationService;
-
     @Test
-    @DisplayName("This tests login")
-
+    @DisplayName("This tests login post request")
     void loginTest() throws Exception {
 
         doReturn("login successful").when(authenticationService).login(any(HttpServletRequest.class), any(HttpServletResponse.class));
@@ -70,11 +70,11 @@ class AuthControllerTest {
                 .param("username", "test_name")
                 .param("password", "test_password"))
                 .andExpect(content().string("login successful"))
-                .andExpect(status().is(200));
+                .andExpect(status().is(SC_OK));
     }
 
     @Test
-    @DisplayName("This tests refresh token functionality")
+    @DisplayName("This tests refresh token get request")
     void refreshTokenTest() throws Exception {
 
         doReturn("New access token created").when(refreshTokenService).CreateNewAccessToken(any(HttpServletRequest.class), any(HttpServletResponse.class));
@@ -84,7 +84,7 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                         .header("Authorization", "Bearer "+ refresh_token))
                 .andExpect(content().string("New access token created"))
-                .andExpect(status().is(200));
+                .andExpect(status().is(SC_OK));
     }
 
 }

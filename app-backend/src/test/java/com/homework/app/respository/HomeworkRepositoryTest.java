@@ -40,20 +40,27 @@ class HomeworkRepositoryTest {
     }
 
     @Test
-    @DisplayName("This tests if repository save method is working")
+    @DisplayName("This tests if HomeworkRepository save method is working")
     void saveHomeworkTest() {
         assertEquals(homework_1, repositoryTest.save(homework_1));
     }
 
     @Test
-    @DisplayName("This tests if repository findAll method is working")
-    void getAllHomeworksTest() {
+    @DisplayName("This tests if HomeworkRepository findAll method is working")
+    void findAllHomeworksTest() {
         assertFalse((repositoryTest.findAll()).isEmpty());
     }
 
     @Test
-    @DisplayName("This tests if findById works as expected")
-    void getHomeworkByIdTest() {
+    @DisplayName("This tests if HomeworkRepository findById works as expected")
+    void findHomeworkByIdTest() {
         assertEquals(Optional.of(homework_1), repositoryTest.findById("test1"));
+    }
+
+    @Test
+    @DisplayName("This tests if HomeworkRepository deleteById works as expected")
+    void deleteHomeworkById() {
+        repositoryTest.deleteById("test_id");
+        assertNull(repositoryTest.findById("test_id").orElse(null));
     }
 }

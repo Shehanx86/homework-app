@@ -1,14 +1,12 @@
 package com.homework.app.respository;
 
-import com.homework.app.model.Homework;
+import com.homework.app.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-
-import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,22 +15,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserRepositoryTest {
 
     @Autowired
-    private HomeworkRepository repositoryTest;
+    private UserRepository repositoryTest;
 
-    private Homework homework_1;
+    private User user;
 
     @BeforeEach
     void setUp(){
-        homework_1 = new Homework(
-                "test1",
-                "title_1",
-                "objective_1",
-                new Date(),
-                "finished",
-                new Date(),
-                new Date());
-
-        repositoryTest.save(homework_1);
+        user = new User();
+        user.setId("test_id");
+        user.setName("test_name");
+        user.setUsername("test_username");
+        user.setPassword("test_password");
+        user.setRole("teacher");
+        repositoryTest.save(user);
     }
 
     @AfterEach
@@ -41,20 +36,27 @@ class UserRepositoryTest {
     }
 
     @Test
-    @DisplayName("This tests if repository save method is working")
-    void saveHomeworkTest() {
-        assertEquals(homework_1, repositoryTest.save(homework_1));
+    @DisplayName("This tests if UserRepository save method is working as expected")
+    void saveUserTest() {
+        assertEquals(user, repositoryTest.save(user));
     }
 
     @Test
-    @DisplayName("This tests if repository findAll method is working")
-    void getAllHomeworksTest() {
+    @DisplayName("This tests if UserRepository findAll method is working as expected")
+    void findAllUsersTest() {
         assertFalse((repositoryTest.findAll()).isEmpty());
     }
 
     @Test
-    @DisplayName("This tests if findById works as expected")
-    void getHomeworkByIdTest() {
-        assertEquals(Optional.of(homework_1), repositoryTest.findById("test1"));
+    @DisplayName("This tests if UserRepository findById works as expected")
+    void findUsersByIdTest() {
+        assertEquals(Optional.of(user), repositoryTest.findById("test_id"));
+    }
+
+    @Test
+    @DisplayName("This tests if UserRepository deleteById works as expected")
+    void deleteUserById() {
+        repositoryTest.deleteById("test_id");
+        assertNull(repositoryTest.findById("test_id").orElse(null));
     }
 }

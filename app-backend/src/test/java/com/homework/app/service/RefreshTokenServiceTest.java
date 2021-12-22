@@ -34,6 +34,7 @@ class RefreshTokenServiceTest {
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
     private User user;
+    private RefreshTokenService refreshTokenService;
 
     @Mock
     UserServiceImpl userService;
@@ -47,29 +48,27 @@ class RefreshTokenServiceTest {
         user.setPassword("test_password");
         user.setRole("teacher");
 
+        refreshTokenService = new RefreshTokenService(userService);
+
         request = new MockHttpServletRequest("GET", "/api/token/refresh");
         response = new MockHttpServletResponse();
     }
 
     @Test
-    @DisplayName("This tests creating new access token for valid refresh tokens")
+    @DisplayName("This tests creating new access token with valid refresh tokens")
     void createNewAccessTokenWithValidRefreshTokenTest() {
         request.addHeader("Authorization", "Bearer " + refresh_token);
         doReturn(user).when(userService).getUserByUsername(any(String.class));
-        RefreshTokenService refreshTokenService = new RefreshTokenService(userService);
         refreshTokenService.CreateNewAccessToken(request, response);
-
         assertEquals(200, response.getStatus());
     }
 
     @Test
-    @DisplayName("This tests creating new access token for invalid refresh tokens")
+    @DisplayName("This tests creating new access token with invalid refresh tokens")
     void createNewAccessTokenWithInvalidAccessToken() {
         request.addHeader("Authorization", "invalid refresh token");
         doReturn(user).when(userService).getUserByUsername(any(String.class));
-        RefreshTokenService refreshTokenService = new RefreshTokenService(userService);
         refreshTokenService.CreateNewAccessToken(request, response);
-
         assertEquals(403, response.getStatus());
     }
 }

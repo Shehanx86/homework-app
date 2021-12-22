@@ -18,6 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CustomAuthorizationFilterTest {
 
+    private MockHttpServletRequest request;
+    private MockHttpServletResponse response;
+    private CustomAuthorizationFilter customAuthorizationFilter;
+    private MockFilterChain filterChain;
+
     private String access_token = createToken(
             "user_test",
             new Date(System.currentTimeMillis() + 30 * 10 * 1000),
@@ -26,34 +31,28 @@ class CustomAuthorizationFilterTest {
             Arrays.asList("teacher")
     );
 
+    @BeforeEach
+    void setUp(){
+        request = new MockHttpServletRequest("GET", "/api/users/teacher");;
+        response = new MockHttpServletResponse();
+        customAuthorizationFilter = new CustomAuthorizationFilter();
+        filterChain = new MockFilterChain();
+    }
+
     @Test
     @DisplayName("This tests authorization filter with invalid access token")
-    void doFilterInternalInvalidTokenTest() throws ServletException, IOException {
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/users/teacher");
+    void doFilterInternalWithInvalidTokenTest() throws ServletException, IOException {
+
         request.addHeader("Authorization", "invalid header");
-
-        MockHttpServletResponse response = new MockHttpServletResponse();
-
-        CustomAuthorizationFilter customAuthorizationFilter = new CustomAuthorizationFilter();
-
-        MockFilterChain filterChain = new MockFilterChain();
-
         customAuthorizationFilter.doFilterInternal(request, response, filterChain);
         assertEquals(403, response.getStatus());
     }
 
     @Test
     @DisplayName("This tests authorization filter with valid access token")
-    void doFilterInternalValidTokenTest() throws ServletException, IOException {
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/users/teacher");
+    void doFilterInternalWithValidTokenTest() throws ServletException, IOException {
+
         request.addHeader("Authorization", "Bearer " + access_token);
-
-        MockHttpServletResponse response = new MockHttpServletResponse();
-
-        CustomAuthorizationFilter customAuthorizationFilter = new CustomAuthorizationFilter();
-
-        MockFilterChain filterChain = new MockFilterChain();
-
         customAuthorizationFilter.doFilterInternal(request, response, filterChain);
         assertEquals(200, response.getStatus());
     }
