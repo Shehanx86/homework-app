@@ -68,7 +68,7 @@ class HomeworkControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/homework/")
                     .header("Authorization", "Bearer "+ access_token_role_student))
-                    .andExpect(status().is(SC_OK));
+                    .andExpect(status().is(SC_FORBIDDEN));
     }
 
     @Test
@@ -102,10 +102,19 @@ class HomeworkControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/homework/test_id")
                         .header("Authorization", "Bearer "+ access_token_role_student))
-                .andExpect(content().json("{}"))
-                .andExpect(status().is(SC_OK));
+                .andExpect(status().is(SC_FORBIDDEN));
     }
 
+    @Test
+    @DisplayName("This tests api/homework/id get request with role student")
+    void getHomeworkByStudentUsernameByStudentRoleTest() throws Exception {
+
+        doReturn(Arrays.asList(homework)).when(service).getHomeworksByStudentUsername("test_username");
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/homework/student/test_username")
+                        .header("Authorization", "Bearer "+ access_token_role_student))
+                .andExpect(status().is(SC_OK));
+    }
     @Test
     @DisplayName("This tests api/homework/id post request with role teacher")
     void addHomeworkByTeacherRoleTest() throws Exception {

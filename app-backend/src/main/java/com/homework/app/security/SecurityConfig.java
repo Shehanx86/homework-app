@@ -41,8 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(STATELESS);
 
         http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**", "/api/test/**").permitAll();
-        http.authorizeRequests().antMatchers(GET, "api/homework/**").hasAnyAuthority( "student");
-        http.authorizeRequests().antMatchers(PUT, "api/homework/status**").hasAnyAuthority("student");
+        http.authorizeRequests().antMatchers(GET, "api/homework/student/**").hasAnyAuthority( "student", "teacher");
+        http.authorizeRequests().antMatchers(PUT, "api/homework/status/**").hasAnyAuthority("student");
         http.authorizeRequests().antMatchers( "api/homework/**").hasAnyAuthority("teacher");
         http.authorizeRequests().antMatchers( "api/users/**").hasAnyAuthority("teacher");
         http.authorizeRequests().anyRequest().authenticated();

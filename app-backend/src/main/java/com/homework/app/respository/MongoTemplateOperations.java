@@ -1,5 +1,6 @@
 package com.homework.app.respository;
 
+import com.homework.app.model.Homework;
 import com.homework.app.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -30,6 +31,12 @@ public class MongoTemplateOperations {
         Query query = new Query();
         query.addCriteria(Criteria.where("role").is(role));
         return mongoTemplate.find(query, User.class);
+    }
+
+    public List<Homework> getHomeworksByStudentUsername(String studentUsername){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("assignedTo").is(studentUsername));
+        return mongoTemplate.find(query, Homework.class);
     }
 
 }

@@ -4,9 +4,11 @@ package com.homework.app.service;
 import com.homework.app.model.Homework;
 import com.homework.app.payload.HomeworkPayload;
 import com.homework.app.respository.HomeworkRepository;
+import com.homework.app.respository.MongoTemplateOperations;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+
 import java.util.Arrays;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,9 +26,12 @@ class HomeworkServiceImplTest {
     @Mock
     private HomeworkRepository homeworkRepositoryTest;
 
+    @Mock
+    private MongoTemplateOperations mongoTemplateOperations;
+
     @BeforeEach
     void setUp(){
-        service = new HomeworkServiceImpl(homeworkRepositoryTest);
+        service = new HomeworkServiceImpl(homeworkRepositoryTest, mongoTemplateOperations);
 
         homework = new Homework();
         homework.setId("test_id");
@@ -69,11 +74,17 @@ class HomeworkServiceImplTest {
     }
 
     @Test
+    @DisplayName("This tests home status change when homework presents")
+    void getHomeworksByStudentUsernameTest(){
+        doReturn(Arrays.asList(homework)).when(mongoTemplateOperations).getHomeworksByStudentUsername("test_username");
+        assertEquals(Arrays.asList(homework), service.getHomeworksByStudentUsername("test_username"));
+    }
+
+    @Test
     @DisplayName("This tests home status change when homework is not present")
     void changeHomeworkStatusIfHomeworkNotPresentTest(){
         doReturn(Optional.ofNullable(null)).when(homeworkRepositoryTest).findById("test_id");
         assertEquals(null, service.changeHomeworkStatus("test_status","test_id"));
-
     }
 
 
