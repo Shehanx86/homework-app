@@ -15,6 +15,10 @@ public class MongoTemplateOperations {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    public MongoTemplateOperations(MongoTemplate mongoTemplate){
+        this.mongoTemplate = mongoTemplate;
+    }
+
     public User getUserByUsername(String username){
         Query query = new Query();
         query.addCriteria(Criteria.where("username").is(username));

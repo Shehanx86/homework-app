@@ -77,7 +77,7 @@ class AuthControllerTest {
     @DisplayName("This tests refresh token get request")
     void refreshTokenTest() throws Exception {
 
-        doReturn("New access token created").when(refreshTokenService).CreateNewAccessToken(any(HttpServletRequest.class), any(HttpServletResponse.class));
+        doReturn("New access token created").when(refreshTokenService).createNewAccessToken(any(HttpServletRequest.class), any(HttpServletResponse.class));
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/token/refresh")

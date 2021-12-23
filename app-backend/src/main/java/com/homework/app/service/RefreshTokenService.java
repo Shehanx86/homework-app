@@ -3,7 +3,6 @@ package com.homework.app.service;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.homework.app.model.User;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +31,7 @@ public class RefreshTokenService {
     @Autowired
     UserServiceImpl userService;
 
-    public String CreateNewAccessToken(HttpServletRequest request, HttpServletResponse response) {
+    public String createNewAccessToken(HttpServletRequest request, HttpServletResponse response) {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
         /**
@@ -52,7 +51,7 @@ public class RefreshTokenService {
                 /**
                  * creates new access token
                  */
-                String new_access_token = createToken(
+                String newAccessToken = createToken(
                         username,
                         expiresAt,
                         issuer,
@@ -61,7 +60,7 @@ public class RefreshTokenService {
                 );
 
                 response.setStatus(SC_OK);
-                response.setHeader("access_token", new_access_token);
+                response.setHeader("access_token", newAccessToken);
                 return "New access token created";
 
             } catch (Exception error){

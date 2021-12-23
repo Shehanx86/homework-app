@@ -2,6 +2,7 @@ package com.homework.app.service;
 
 
 import com.homework.app.model.Homework;
+import com.homework.app.payload.HomeworkPayload;
 import com.homework.app.respository.HomeworkRepository;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
@@ -18,6 +19,7 @@ class HomeworkServiceImplTest {
 
     private HomeworkServiceImpl service;
     private Homework homework;
+    private HomeworkPayload homeworkPayload;
 
     @Mock
     private HomeworkRepository homeworkRepositoryTest;
@@ -39,6 +41,7 @@ class HomeworkServiceImplTest {
         assertEquals(Optional.of(homework), service.getHomeworkById("test_id"));
     }
 
+
     @Test
     @DisplayName("This tests getAllHomework service method")
     void getAllHomeworkTest(){
@@ -49,16 +52,57 @@ class HomeworkServiceImplTest {
     @Test
     @DisplayName("This tests addHomework service method")
     void addHomeworkServiceMethodTest(){
+        homeworkPayload = new HomeworkPayload();
+        homeworkPayload.setpId("test_id");
+        homeworkPayload.setpTitle("test_title");
+        homeworkPayload.setpObjectives("test_objectives");
         doReturn(homework).when(homeworkRepositoryTest).save(any(Homework.class));
-        assertEquals(homework, service.addHomework(homework));
+        assertEquals(homework, service.addHomework(homeworkPayload));
     }
 
     @Test
-    @DisplayName("This tests changeHomeworkById service method")
-    void changeHomeworkByIdTest(){
-        doReturn(Optional.of(homework)).when(homeworkRepositoryTest).findById("test_id");
+    @DisplayName("This tests home status change when homework presents")
+    void changeHomeworkStatusIfHomeworkPresentTest(){
+        doReturn(Optional.ofNullable(homework)).when(homeworkRepositoryTest).findById("test_id");
+        doReturn(homework).when(homeworkRepositoryTest).save(homework);
+        assertEquals(homework, service.changeHomeworkStatus("test_status","test_id"));
+    }
+
+    @Test
+    @DisplayName("This tests home status change when homework is not present")
+    void changeHomeworkStatusIfHomeworkNotPresentTest(){
+        doReturn(Optional.ofNullable(null)).when(homeworkRepositoryTest).findById("test_id");
+        assertEquals(null, service.changeHomeworkStatus("test_status","test_id"));
+
+    }
+
+
+    @Test
+    @DisplayName("This tests changeHomeworkById service method when homework is present")
+    void changeHomeworkByIdIfHomeworkPresentTestTest(){
+        homeworkPayload = new HomeworkPayload();
+        homeworkPayload.setpId("test_id");
+        homeworkPayload.setpTitle("test_title");
+        homeworkPayload.setpObjectives("test_objectives");
+
         doReturn(homework).when(homeworkRepositoryTest).save(any(Homework.class));
-        assertEquals(homework, service.changeHomeworkById(homework,"test_id"));
+        assertEquals(homework, service.addHomework(homeworkPayload));
+        doReturn(Optional.ofNullable(homework)).when(homeworkRepositoryTest).findById("test_id");
+        doReturn(homework).when(homeworkRepositoryTest).save(any(Homework.class));
+        assertEquals(homework, service.changeHomeworkById(homeworkPayload,"test_id"));
+
+    }
+
+    @Test
+    @DisplayName("This tests changeHomeworkById service method when homework is not present")
+    void changeHomeworkByIdIfHomeworkNotPresentTestTest(){
+        homeworkPayload = new HomeworkPayload();
+        homeworkPayload.setpId("test_id");
+        homeworkPayload.setpTitle("test_title");
+        homeworkPayload.setpObjectives("test_objectives");
+
+        doReturn(Optional.ofNullable(null)).when(homeworkRepositoryTest).findById("test_id");
+        assertEquals(null, service.changeHomeworkById(homeworkPayload,"test_id"));
 
     }
 
