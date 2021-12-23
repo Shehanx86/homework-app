@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import java.util.Date;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,15 +21,10 @@ class HomeworkRepositoryTest {
 
     @BeforeEach
     void setUp(){
-        homework_1 = new Homework(
-                "test1",
-                "title_1",
-                "objective_1",
-                new Date(),
-                "status",
-                new Date(),
-                new Date());
-
+        homework_1 = new Homework();
+        homework_1.setId("test1");
+        homework_1.setTitle("title_1");
+        homework_1.setStatus("status");
         repositoryTest.save(homework_1);
     }
 

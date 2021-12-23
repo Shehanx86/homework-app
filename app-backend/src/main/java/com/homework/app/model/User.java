@@ -9,6 +9,12 @@ public class User {
     @Id
     private String id;
     private String name;
+    private String username;
+    private String password;
+    private String role;
+
+    public User() {
+    }
 
     public String getId() {
         return id;
@@ -49,20 +55,5 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-
-    public User() {
-    }
-
-    public User(String id, String name, String username, String password, String role) {
-        this.id = id;
-        this.name = name;
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
-
-    private String username;
-    private String password;
-    private String role;
 
 }

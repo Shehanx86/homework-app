@@ -1,5 +1,6 @@
 package com.homework.app.respository;
 
+import com.homework.app.model.Homework;
 import com.homework.app.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -7,14 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,6 +21,7 @@ import static org.mockito.Mockito.doReturn;
 class MongoTemplateOperationsTest {
 
     private User user;
+    private Homework homework;
     private MongoTemplateOperations mongoTemplateOperations;
     @Mock
     private MongoTemplate mongoTemplate;
@@ -39,6 +36,9 @@ class MongoTemplateOperationsTest {
         user.setRole("teacher");
 
         mongoTemplateOperations = new MongoTemplateOperations(mongoTemplate);
+
+        homework = new Homework();
+        homework.setId("test_id");
     }
 
     @Test
@@ -53,6 +53,13 @@ class MongoTemplateOperationsTest {
     void getAllUsersByRoleTest() {
         doReturn(Arrays.asList(user)).when(mongoTemplate).find(any(Query.class), eq(User.class));
         assertEquals(Arrays.asList(user), mongoTemplateOperations.getAllUsersByRole("test_role"));
+    }
+
+    @Test
+    @DisplayName("This tests getting homework by student username")
+    void getHomeworkByStudentUsernameTest() {
+        doReturn(Arrays.asList(homework)).when(mongoTemplate).find(any(Query.class), eq(Homework.class));
+        assertEquals(Arrays.asList(homework), mongoTemplateOperations.getHomeworksByStudentUsername("test_username"));
     }
 
 }

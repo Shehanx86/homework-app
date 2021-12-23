@@ -10,26 +10,17 @@ public class Homework {
 
     @Id
     private String id;
-
-    public Homework(String id, String title, String objectives, Date createdAt, String status, Date deadline, Date lastUpdatedAt) {
-        this.id = id;
-        this.title = title;
-        this.objectives = objectives;
-        this.createdAt = createdAt;
-        this.status = status;
-        this.deadline = deadline;
-        this.lastUpdatedAt = lastUpdatedAt;
-    }
-
-    public Homework() {
-    }
-
     private String title;
     private String objectives;
     private Date createdAt;
     private String status;
     private Date deadline;
     private Date lastUpdatedAt;
+    private String assignedBy;
+    private String assignedTo;
+
+    public Homework() {
+    }
 
     public String getId() {
         return id;
@@ -85,5 +76,21 @@ public class Homework {
 
     public void setLastUpdatedAt(Date lastUpdatedAt) {
         this.lastUpdatedAt = lastUpdatedAt;
+    }
+
+    public String getAssignedBy() {
+        return assignedBy;
+    }
+
+    public void setAssignedBy(String assignedBy) {
+        this.assignedBy = assignedBy;
+    }
+
+    public String getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(String assignedTo) {
+        this.assignedTo = assignedTo;
     }
 }

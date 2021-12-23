@@ -26,15 +26,21 @@ public class HomeworkController {
     }
 
     @GetMapping("/")
-    @PreAuthorize("hasAnyAuthority('teacher', 'student')")
+    @PreAuthorize("hasAnyAuthority('teacher')")
     public List<Homework> getAllHomework(){
         return service.getAllHomeworks();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('teacher', 'student')")
+    @PreAuthorize("hasAnyAuthority('teacher')")
     public Optional<Homework> getHomeworkById(@PathVariable String id){
         return service.getHomeworkById(id);
+    }
+
+    @GetMapping("/student/{username}")
+    @PreAuthorize("hasAnyAuthority('teacher', 'student')")
+    public List<Homework> getHomeworkByStudentUsername(@PathVariable String username){
+        return service.getHomeworksByStudentUsername(username);
     }
 
     @PutMapping("/{id}")
