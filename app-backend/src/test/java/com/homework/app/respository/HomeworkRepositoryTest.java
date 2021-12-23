@@ -1,20 +1,17 @@
 package com.homework.app.respository;
 
 import com.homework.app.model.Homework;
-import com.homework.app.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 
 @DataMongoTest
 class HomeworkRepositoryTest {
@@ -57,7 +54,7 @@ class HomeworkRepositoryTest {
     @Test
     @DisplayName("This tests if HomeworkRepository findById works as expected")
     void findHomeworkByIdTest() {
-        assertEquals(Optional.of(homework_1), repositoryTest.findById("test1"));
+        assertNotNull(repositoryTest.findById("test1"));
     }
 
     @Test

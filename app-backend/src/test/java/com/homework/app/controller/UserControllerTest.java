@@ -1,6 +1,7 @@
 package com.homework.app.controller;
 
 import com.homework.app.model.User;
+import com.homework.app.payload.UserPayload;
 import com.homework.app.service.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +21,8 @@ import java.util.Optional;
 import static com.homework.app.controller.HomeworkControllerTest.asJsonString;
 import static com.homework.app.util.UtilJWT.CLAIM;
 import static com.homework.app.util.UtilJWT.createToken;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -90,7 +93,7 @@ class UserControllerTest {
     @DisplayName("This tests add teachers with role teacher")
     void addTeacherByRoleTeacher() throws Exception {
 
-        doReturn(user).when(service).addUser(user, "teacher");
+        doReturn(user).when(service).addUser(any(UserPayload.class), eq("teacher"));
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/teacher")
                         .header("Authorization", "Bearer "+ access_token_role_teacher)
@@ -105,7 +108,7 @@ class UserControllerTest {
     @DisplayName("This tests add teachers with role student")
     void addTeacherByRoleStudent() throws Exception {
 
-        doReturn(user).when(service).addUser(user, "teacher");
+        doReturn(user).when(service).addUser(any(UserPayload.class), eq("teacher"));
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users/teacher")
                         .header("Authorization", "Bearer "+ access_token_role_student)
@@ -133,7 +136,7 @@ class UserControllerTest {
     @DisplayName("This tests change teacher with role teacher")
     void changeTeacherByRoleTeacherTest() throws Exception {
 
-        doReturn(user).when(service).updateUser("test_id", user);
+        doReturn(user).when(service).updateUser(eq("test_id"), any(UserPayload.class));
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/users/user/test_id")
                         .header("Authorization", "Bearer "+ access_token_role_teacher)
@@ -148,7 +151,7 @@ class UserControllerTest {
     @DisplayName("This tests change teacher with role student")
     void changeTeacherByRoleStudentTest() throws Exception {
 
-        doReturn(user).when(service).updateUser("test_id", user);
+        doReturn(user).when(service).updateUser(eq("test_id"), any(UserPayload.class));
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/users/user/test_id")
                         .header("Authorization", "Bearer "+ access_token_role_student)

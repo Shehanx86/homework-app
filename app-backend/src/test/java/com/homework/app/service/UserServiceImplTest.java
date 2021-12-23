@@ -1,6 +1,7 @@
 package com.homework.app.service;
 
 import com.homework.app.model.User;
+import com.homework.app.payload.UserPayload;
 import com.homework.app.respository.MongoTemplateOperations;
 import com.homework.app.respository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,8 +47,15 @@ class UserServiceImplTest {
     @Test
     @DisplayName("This tests add user")
     void addUserTest() {
+        UserPayload userPayload = new UserPayload();
+        userPayload.setpId(user.getId());
+        userPayload.setpName(user.getName());
+        userPayload.setpUsername(user.getUsername());
+        userPayload.setpRole(user.getRole());
+        userPayload.setpPassword(user.getPassword());
+
         doReturn(user).when(userRepositoryTest).save(any(User.class));
-        assertEquals(user, service.addUser(user, "teacher"));
+        assertEquals(user, service.addUser(userPayload, "teacher"));
     }
 
     @Test
@@ -74,16 +82,30 @@ class UserServiceImplTest {
     @Test
     @DisplayName("This tests update user if user exists")
     void updateUserIfUserExistTest() {
+        UserPayload userPayload = new UserPayload();
+        userPayload.setpId(user.getId());
+        userPayload.setpName(user.getName());
+        userPayload.setpUsername(user.getUsername());
+        userPayload.setpRole(user.getRole());
+        userPayload.setpPassword(user.getPassword());
+
         doReturn(Optional.ofNullable(user)).when(userRepositoryTest).findById(any(String.class));
         doReturn(user).when(userRepositoryTest).save(any(User.class));
-        assertEquals(user, service.updateUser("test_id", user));
+        assertEquals(user, service.updateUser("test_id", userPayload));
     }
 
     @Test
     @DisplayName("This tests update user if user does not exist")
     void updateUserIfUserNotExistTest() {
+        UserPayload userPayload = new UserPayload();
+        userPayload.setpId(user.getId());
+        userPayload.setpName(user.getName());
+        userPayload.setpUsername(user.getUsername());
+        userPayload.setpRole(user.getRole());
+        userPayload.setpPassword(user.getPassword());
+
         doReturn(Optional.ofNullable(null)).when(userRepositoryTest).findById(any(String.class));
-        assertEquals(null, service.updateUser("test_id", user));
+        assertEquals(null, service.updateUser("test_id", userPayload));
     }
 
     @Test

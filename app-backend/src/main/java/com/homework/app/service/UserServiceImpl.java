@@ -1,6 +1,7 @@
 package com.homework.app.service;
 
 import com.homework.app.model.User;
+import com.homework.app.payload.UserPayload;
 import com.homework.app.respository.MongoTemplateOperations;
 import com.homework.app.respository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,13 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User addUser(User user, String role){
+    public User addUser(UserPayload userPayload, String role){
+        User user = new User();
+        user.setId(userPayload.getpId());
+        user.setName(userPayload.getpName());
+        user.setUsername(userPayload.getpUsername());
         user.setRole(role);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(userPayload.getpPassword()));
         return userRepository.save(user);
     }
 
@@ -45,13 +50,19 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         return userRepository.findById(id);
     }
 
-    public User updateUser(String id, User user){
+    public User updateUser(String id, UserPayload userPayload){
+
+        User user = new User();
+        user.setId(userPayload.getpId());
+        user.setName(userPayload.getpName());
+        user.setUsername(userPayload.getpUsername());
+        user.setRole(userPayload.getpRole());
+
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()){
             User updatedUser = optionalUser.get();
-            updatedUser.setUsername(user.getUsername());
+            updatedUser.setId(user.getId());
             updatedUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            updatedUser.setName(user.getName());
             return userRepository.save(updatedUser);
         } else {
             return null;

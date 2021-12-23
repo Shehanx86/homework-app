@@ -1,6 +1,7 @@
 package com.homework.app.controller;
 
 import com.homework.app.model.Homework;
+import com.homework.app.payload.HomeworkPayload;
 import com.homework.app.service.HomeworkServiceImpl;
 import com.homework.app.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class HomeworkController {
 
     @PostMapping("/")
     @PreAuthorize("hasAnyAuthority('teacher')")
-    public Homework addHomework(@RequestBody Homework homework){
+    public Homework addHomework(@RequestBody HomeworkPayload homework){
         return service.addHomework(homework);
     }
 
@@ -38,7 +39,7 @@ public class HomeworkController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('teacher')")
-    public Homework changeHomeworkById(@RequestBody Homework homework, @PathVariable String id){
+    public Homework changeHomeworkById(@RequestBody HomeworkPayload homework, @PathVariable String id){
         return service.changeHomeworkById(homework, id);
     }
 
