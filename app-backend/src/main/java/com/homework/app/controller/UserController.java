@@ -1,6 +1,7 @@
 package com.homework.app.controller;
 
 import com.homework.app.model.User;
+import com.homework.app.payload.UserPayload;
 import com.homework.app.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/")
+@RequestMapping("api/users")
 public class UserController {
 
     @Autowired
     UserServiceImpl userService;
 
-    @GetMapping("/users/{role}")
+    @GetMapping("/{role}")
     @PreAuthorize("hasAnyAuthority('teacher')")
     public List<User> getAllUsersByRole(@PathVariable String role){
         return userService.getAllUsersByRole(role);
@@ -27,15 +28,15 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping("users/{role}")
+    @PostMapping("/{role}")
     @PreAuthorize("hasAnyAuthority('teacher')")
-    public User addUser(@PathVariable String role, @RequestBody User user){
+    public User addUser(@PathVariable String role, @RequestBody UserPayload user){
         return userService.addUser(user, role);
     }
 
     @PutMapping("user/{id}")
     @PreAuthorize("hasAnyAuthority('teacher')")
-    public User updateTeacher(@PathVariable String id, @RequestBody User user){
+    public User updateTeacher(@PathVariable String id, @RequestBody UserPayload user){
         return userService.updateUser(id, user);
     }
 

@@ -1,22 +1,16 @@
 package com.homework.app.controller;
 
-import com.homework.app.filter.CustomAuthenticationFilter;
 import com.homework.app.model.Homework;
+import com.homework.app.payload.HomeworkPayload;
 import com.homework.app.service.HomeworkServiceImpl;
 import com.homework.app.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
-import static java.util.Arrays.stream;
-
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/homework")
 public class HomeworkController {
 
     @Autowired
@@ -25,37 +19,37 @@ public class HomeworkController {
     @Autowired
     UserServiceImpl userService;
 
-    @PostMapping("/homework")
+    @PostMapping("/")
     @PreAuthorize("hasAnyAuthority('teacher')")
-    public Homework addHomework(@RequestBody Homework homework){
+    public Homework addHomework(@RequestBody HomeworkPayload homework){
         return service.addHomework(homework);
     }
 
-    @GetMapping("/homework")
+    @GetMapping("/")
     @PreAuthorize("hasAnyAuthority('teacher', 'student')")
     public List<Homework> getAllHomework(){
         return service.getAllHomeworks();
     }
 
-    @GetMapping("/homework/{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('teacher', 'student')")
     public Optional<Homework> getHomeworkById(@PathVariable String id){
         return service.getHomeworkById(id);
     }
 
-    @PutMapping("/homework/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('teacher')")
-    public Homework changeHomeworkById(@RequestBody Homework homework, @PathVariable String id){
+    public Homework changeHomeworkById(@RequestBody HomeworkPayload homework, @PathVariable String id){
         return service.changeHomeworkById(homework, id);
     }
 
-    @PutMapping("/homework/{id}/{status}")
+    @PutMapping("/status/{id}/{status}")
     @PreAuthorize("hasAnyAuthority('student')")
     public Homework changeHomeworkStatus(@PathVariable String id, @PathVariable String status){
         return service.changeHomeworkStatus(status, id);
     }
 
-    @DeleteMapping("/homework/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('teacher')")
     public String deleteHomework(@PathVariable String id){
         return service.deleteHomework(id);

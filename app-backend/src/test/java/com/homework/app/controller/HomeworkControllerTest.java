@@ -1,6 +1,7 @@
 package com.homework.app.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homework.app.model.Homework;
+import com.homework.app.payload.HomeworkPayload;
 import com.homework.app.service.HomeworkServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,8 @@ import java.util.Optional;
 
 import static com.homework.app.util.UtilJWT.CLAIM;
 import static com.homework.app.util.UtilJWT.createToken;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -107,7 +110,7 @@ class HomeworkControllerTest {
     @DisplayName("This tests api/homework/id post request with role teacher")
     void addHomeworkByTeacherRoleTest() throws Exception {
 
-        doReturn(homework).when(service).addHomework(homework);
+        doReturn(homework).when(service).addHomework(any(HomeworkPayload.class));
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/homework/")
                         .header("Authorization", "Bearer "+ access_token_role_teacher)
@@ -122,7 +125,7 @@ class HomeworkControllerTest {
     @DisplayName("This tests api/homework/id post request with role student")
     void addHomeworkByStudentRoleTest() throws Exception {
 
-        doReturn(homework).when(service).addHomework(homework);
+        doReturn(homework).when(service).addHomework(any(HomeworkPayload.class));
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/homework/")
                         .header("Authorization", "Bearer "+ access_token_role_student)
@@ -136,7 +139,7 @@ class HomeworkControllerTest {
     @DisplayName("This tests api/homework/id put request with role teacher")
     void changeHomeworkByTeacherRoleTest() throws Exception {
 
-        doReturn(homework).when(service).changeHomeworkById(homework, "test_id");
+        doReturn(homework).when(service).changeHomeworkById(any(HomeworkPayload.class), eq("test_id"));
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/homework/test_id")
                         .header("Authorization", "Bearer "+ access_token_role_teacher)
@@ -151,7 +154,7 @@ class HomeworkControllerTest {
     @DisplayName("This tests api/homework/id put request with role student")
     void changeHomeworkByStudentRoleTest() throws Exception {
 
-        doReturn(homework).when(service).changeHomeworkById(homework, "test_id");
+        doReturn(homework).when(service).changeHomeworkById(any(HomeworkPayload.class), eq("test_id"));
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/homework/test_id")
                         .header("Authorization", "Bearer "+ access_token_role_student)
@@ -159,6 +162,16 @@ class HomeworkControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(SC_FORBIDDEN));
+    }
+
+    @Test
+    @DisplayName("This tests homework status change by student role")
+    void changeHomeworkStatusByStudentToleTest() throws Exception {
+        doReturn(homework).when(service).changeHomeworkStatus("test_status", "test_id");
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/homework/status/test_id/test_status")
+                        .header("Authorization", "Bearer "+ access_token_role_student))
+                .andExpect(status().is(SC_OK));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.homework.app.service;
 
 import com.homework.app.model.Homework;
+import com.homework.app.payload.HomeworkPayload;
 import com.homework.app.respository.HomeworkRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,9 @@ import java.util.Optional;
 @NoArgsConstructor
 public class HomeworkServiceImpl implements IHomeworkService {
 
+    @Autowired
     HomeworkRepository hwRepository;
 
-    @Autowired
     HomeworkServiceImpl(HomeworkRepository hwRepository){
         this.hwRepository = hwRepository;
     }
@@ -28,9 +29,17 @@ public class HomeworkServiceImpl implements IHomeworkService {
         return hwRepository.findAll();
     }
 
-    public Homework addHomework(Homework homework){
-        homework.setCreatedAt(new Date());
-        return hwRepository.save(homework);
+    public Homework addHomework(HomeworkPayload homeworkPayload){
+        Homework newHomework = new Homework();
+        newHomework.setId(homeworkPayload.getpId());
+        newHomework.setTitle(homeworkPayload.getpTitle());
+        newHomework.setLastUpdatedAt(homeworkPayload.getpLastUpdatedAt());
+        newHomework.setDeadline(homeworkPayload.getpDeadline());
+        newHomework.setObjectives(homeworkPayload.getpObjectives());
+        newHomework.setStatus(homeworkPayload.getpStatus());
+        newHomework.setCreatedAt(new Date());
+
+        return hwRepository.save(newHomework);
     }
 
     public Homework changeHomeworkStatus(String status, String id){
@@ -44,26 +53,24 @@ public class HomeworkServiceImpl implements IHomeworkService {
         }
     }
 
-    public Homework changeHomeworkById(Homework newHomework, String id){
+    public Homework changeHomeworkById(HomeworkPayload homeworkPayload, String id){
 
-        Optional<Homework> currentTomework = hwRepository.findById(id);
-        Homework updatedHomework;
+        Homework newHomework = new Homework();
+        newHomework.setId(homeworkPayload.getpId());
+        newHomework.setTitle(homeworkPayload.getpTitle());
+        newHomework.setLastUpdatedAt(homeworkPayload.getpLastUpdatedAt());
+        newHomework.setDeadline(homeworkPayload.getpDeadline());
+        newHomework.setObjectives(homeworkPayload.getpObjectives());
+        newHomework.setStatus(homeworkPayload.getpStatus());
+        newHomework.setCreatedAt(new Date());
 
-        if(currentTomework.isPresent()){
-            updatedHomework = currentTomework.get();
-            updatedHomework.setLastUpdatedAt(new Date());
+        Optional<Homework> currentHomework = hwRepository.findById(id);
 
-            if(newHomework.getTitle() != null){
-                updatedHomework.setTitle(newHomework.getTitle());
-            }
-            if(newHomework.getDeadline() != null){
-                updatedHomework.setDeadline(newHomework.getDeadline());
-            }
-            if(newHomework.getObjectives() != null){
-                updatedHomework.setObjectives(newHomework.getObjectives());
-            }
-
-            return hwRepository.save(updatedHomework);
+        if(currentHomework.isPresent()){
+            newHomework = currentHomework.get();
+            newHomework.setId(currentHomework.get().getId());
+            newHomework.setLastUpdatedAt(new Date());
+            return hwRepository.save(newHomework);
         } else {
             return null;
         }

@@ -3,7 +3,6 @@ package com.homework.app.controller;
 import com.homework.app.service.AuthenticationService;
 import com.homework.app.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,14 +15,11 @@ public class AuthController {
     AuthenticationService authenticationService;
 
     @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
     RefreshTokenService refreshTokenService;
 
     @GetMapping("/token/refresh")
     public String refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        return refreshTokenService.CreateNewAccessToken(request, response);
+        return refreshTokenService.createNewAccessToken(request, response);
     }
 
     @PostMapping("/login")

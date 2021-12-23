@@ -10,29 +10,23 @@ import java.util.List;
 
 public class UtilJWT {
 
+    private UtilJWT(){}
+
     public static final String SECRET = "secret";
     public static final String CLAIM = "roles";
 
-    public static boolean isAuthorizationHeaderValid(String authorizationHeader){
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
-            return true;
-        } else{
-            return false;
-        }
-    }
-
     public static DecodedJWT decodeToken(String token){
-        String refresh_token = token.substring("Bearer ".length());
+        String refreshToken = token.substring("Bearer ".length());
         Algorithm algorithm = Algorithm.HMAC256(SECRET.getBytes());
         JWTVerifier verifier = JWT.require(algorithm).build();
-        return verifier.verify(refresh_token);
+        return verifier.verify(refreshToken);
     }
 
-    public static String createToken(String username, Date expiresAt, String Issuer, String claimName, List<String> claimList){
+    public static String createToken(String username, Date expiresAt, String issuer, String claimName, List<String> claimList){
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(expiresAt)
-                .withIssuer(Issuer)
+                .withIssuer(issuer)
                 .withClaim(claimName, claimList)
                 .sign(Algorithm.HMAC256(SECRET.getBytes()));
     }
