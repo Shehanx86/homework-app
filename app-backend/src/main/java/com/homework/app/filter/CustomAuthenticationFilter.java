@@ -2,7 +2,6 @@ package com.homework.app.filter;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Checks credentials and creates refresh and access tokens
  */
-@Slf4j
 @NoArgsConstructor
 @Data
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {

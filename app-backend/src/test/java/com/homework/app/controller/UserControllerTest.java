@@ -120,7 +120,7 @@ class UserControllerTest {
 
         doReturn(user).when(service).updateUser("test_id", user);
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/user/test_id")
+                MockMvcRequestBuilders.put("/api/users/user/test_id")
                         .header("Authorization", "Bearer "+ access_token_role_teacher)
                         .content(asJsonString(user))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +135,7 @@ class UserControllerTest {
 
         doReturn(user).when(service).updateUser("test_id", user);
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/user/test_id")
+                MockMvcRequestBuilders.put("/api/users/user/test_id")
                         .header("Authorization", "Bearer "+ access_token_role_student)
                         .content(asJsonString(user))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -150,7 +150,7 @@ class UserControllerTest {
         doReturn(user).when(service).deleteUser("test_id");
 
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/api/user/test_id")
+                MockMvcRequestBuilders.delete("/api/users/user/test_id")
                         .header("Authorization", "Bearer "+ access_token_role_teacher))
                 .andExpect(content().json("{}"))
                 .andExpect(status().is(SC_OK));
@@ -158,11 +158,11 @@ class UserControllerTest {
 
     @Test
     @DisplayName("This tests delete teacher with role teacher")
-    void deleteTeacheByrRolesStudentTest() throws Exception {
+    void deleteTeacherByrRolesStudentTest() throws Exception {
 
         doReturn(user).when(service).deleteUser("test_id");
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/api/user/test_id")
+                MockMvcRequestBuilders.delete("/api/users/user/test_id")
                         .header("Authorization", "Bearer "+ access_token_role_student))
                 .andExpect(status().is(SC_FORBIDDEN));
     }

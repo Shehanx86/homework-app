@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.InvalidPropertiesFormatException;
 
 import static com.homework.app.util.TokenTester.validateToken;
 import static com.homework.app.util.UtilJWT.*;

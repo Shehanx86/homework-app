@@ -59,7 +59,7 @@ class RefreshTokenServiceTest {
     void createNewAccessTokenWithValidRefreshTokenTest() {
         request.addHeader("Authorization", "Bearer " + refresh_token);
         doReturn(user).when(userService).getUserByUsername(any(String.class));
-        refreshTokenService.CreateNewAccessToken(request, response);
+        refreshTokenService.createNewAccessToken(request, response);
         assertEquals(200, response.getStatus());
     }
 
@@ -68,7 +68,7 @@ class RefreshTokenServiceTest {
     void createNewAccessTokenWithInvalidAccessToken() {
         request.addHeader("Authorization", "invalid refresh token");
         doReturn(user).when(userService).getUserByUsername(any(String.class));
-        refreshTokenService.CreateNewAccessToken(request, response);
+        refreshTokenService.createNewAccessToken(request, response);
         assertEquals(403, response.getStatus());
     }
 }

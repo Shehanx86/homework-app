@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/")
+@RequestMapping("api/users")
 public class UserController {
 
     @Autowired
     UserServiceImpl userService;
 
-    @GetMapping("/users/{role}")
+    @GetMapping("/{role}")
     @PreAuthorize("hasAnyAuthority('teacher')")
     public List<User> getAllUsersByRole(@PathVariable String role){
         return userService.getAllUsersByRole(role);
@@ -27,7 +27,7 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping("users/{role}")
+    @PostMapping("/{role}")
     @PreAuthorize("hasAnyAuthority('teacher')")
     public User addUser(@PathVariable String role, @RequestBody User user){
         return userService.addUser(user, role);

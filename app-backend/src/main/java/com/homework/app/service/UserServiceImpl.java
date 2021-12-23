@@ -1,13 +1,10 @@
 package com.homework.app.service;
 
 import com.homework.app.model.User;
-import com.homework.app.respository.HomeworkRepository;
 import com.homework.app.respository.MongoTemplateOperations;
 import com.homework.app.respository.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

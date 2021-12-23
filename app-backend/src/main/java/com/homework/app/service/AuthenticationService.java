@@ -50,14 +50,14 @@ public class AuthenticationService {
             List<String> claims =  user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
             try {
-                String access_token = createToken(
+                String accessToken = createToken(
                         username,
                         accessTokenExpiresAt,
                         issuer,
                         CLAIM,
                         claims
                 );
-                String refresh_token =  createToken(
+                String refreshToken =  createToken(
                         username,
                         refreshTokenExpiresAt,
                         issuer,
@@ -66,8 +66,8 @@ public class AuthenticationService {
                 );
 
                 response.setStatus(SC_OK);
-                response.setHeader("access_token", access_token);
-                response.setHeader("refresh_token", refresh_token);
+                response.setHeader("access_token", accessToken);
+                response.setHeader("refresh_token", refreshToken);
                 return "login successful";
 
             } catch (Exception error){
