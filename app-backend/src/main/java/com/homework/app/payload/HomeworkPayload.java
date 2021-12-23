@@ -10,6 +10,8 @@ public class HomeworkPayload {
     private String pStatus;
     private Date pDeadline;
     private Date pLastUpdatedAt;
+    private String pAssignedBy;
+    private String pAssignedTo;
 
     public HomeworkPayload() {
     }
@@ -68,5 +70,21 @@ public class HomeworkPayload {
 
     public void setpLastUpdatedAt(Date pLastUpdatedAt) {
         this.pLastUpdatedAt = pLastUpdatedAt;
+    }
+
+    public String getpAssignedBy() {
+        return pAssignedBy;
+    }
+
+    public void setpAssignedBy(String pAssignedBy) {
+        this.pAssignedBy = pAssignedBy;
+    }
+
+    public String getpAssignedTo() {
+        return pAssignedTo;
+    }
+
+    public void setpAssignedTo(String pAssignedTo) {
+        this.pAssignedTo = pAssignedTo;
     }
 }
