@@ -13,9 +13,9 @@ import java.util.Optional;
 @NoArgsConstructor
 public class HomeworkServiceImpl implements IHomeworkService {
 
+    @Autowired
     HomeworkRepository hwRepository;
 
-    @Autowired
     HomeworkServiceImpl(HomeworkRepository hwRepository){
         this.hwRepository = hwRepository;
     }
@@ -51,18 +51,8 @@ public class HomeworkServiceImpl implements IHomeworkService {
 
         if(currentTomework.isPresent()){
             updatedHomework = currentTomework.get();
+            updatedHomework.setId(currentTomework.get().getId());
             updatedHomework.setLastUpdatedAt(new Date());
-
-            if(newHomework.getTitle() != null){
-                updatedHomework.setTitle(newHomework.getTitle());
-            }
-            if(newHomework.getDeadline() != null){
-                updatedHomework.setDeadline(newHomework.getDeadline());
-            }
-            if(newHomework.getObjectives() != null){
-                updatedHomework.setObjectives(newHomework.getObjectives());
-            }
-
             return hwRepository.save(updatedHomework);
         } else {
             return null;

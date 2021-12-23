@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Optional;
 
 import static com.homework.app.controller.HomeworkControllerTest.asJsonString;
 import static com.homework.app.util.UtilJWT.CLAIM;
@@ -112,6 +113,20 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(SC_FORBIDDEN));
+    }
+
+    @Test
+    @DisplayName("This tests finding teacher by id with role teacher")
+    void getTeacherByIdRoleTeacherTest() throws Exception {
+        doReturn(Optional.ofNullable(user)).when(service).getUserById("test_id");
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/users/user/test_id")
+                        .header("Authorization", "Bearer "+ access_token_role_teacher)
+                        .content(asJsonString(user))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(SC_OK))
+                .andExpect(content().json("{}"));
     }
 
     @Test

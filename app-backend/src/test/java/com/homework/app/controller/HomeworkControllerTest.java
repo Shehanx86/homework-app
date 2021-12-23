@@ -162,6 +162,16 @@ class HomeworkControllerTest {
     }
 
     @Test
+    @DisplayName("This tests homework status change by student role")
+    void changeHomeworkStatusByStudentToleTest() throws Exception {
+        doReturn(homework).when(service).changeHomeworkStatus("test_status", "test_id");
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/homework/status/test_id/test_status")
+                        .header("Authorization", "Bearer "+ access_token_role_student))
+                .andExpect(status().is(SC_OK));
+    }
+
+    @Test
     @DisplayName("This tests api/homework/id delete request with role teacher")
     void deleteHomeworkByTeacherRolesTest() throws Exception {
 

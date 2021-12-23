@@ -1,7 +1,9 @@
 package com.homework.app.filter;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,20 +13,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Checks credentials and creates refresh and access tokens
- */
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
+@Setter
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    @Autowired
     private AuthenticationManager authenticationManager;
-    private HttpServletRequest request;
-    private HttpServletResponse response;
-
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
     /**
      * authenticate user
      */

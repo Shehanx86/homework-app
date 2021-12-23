@@ -39,6 +39,7 @@ class HomeworkServiceImplTest {
         assertEquals(Optional.of(homework), service.getHomeworkById("test_id"));
     }
 
+
     @Test
     @DisplayName("This tests getAllHomework service method")
     void getAllHomeworkTest(){
@@ -54,11 +55,36 @@ class HomeworkServiceImplTest {
     }
 
     @Test
-    @DisplayName("This tests changeHomeworkById service method")
-    void changeHomeworkByIdTest(){
-        doReturn(Optional.of(homework)).when(homeworkRepositoryTest).findById("test_id");
+    @DisplayName("This tests home status change when homework presents")
+    void changeHomeworkStatusIfHomeworkPresentTest(){
+        doReturn(Optional.ofNullable(homework)).when(homeworkRepositoryTest).findById("test_id");
+        doReturn(homework).when(homeworkRepositoryTest).save(homework);
+        assertEquals(homework, service.changeHomeworkStatus("test_status","test_id"));
+    }
+
+    @Test
+    @DisplayName("This tests home status change when homework is not present")
+    void changeHomeworkStatusIfHomeworkNotPresentTest(){
+        doReturn(Optional.ofNullable(null)).when(homeworkRepositoryTest).findById("test_id");
+        assertEquals(null, service.changeHomeworkStatus("test_status","test_id"));
+
+    }
+
+
+    @Test
+    @DisplayName("This tests changeHomeworkById service method when homework is present")
+    void changeHomeworkByIdIfHomeworkPresentTestTest(){
+        doReturn(Optional.ofNullable(homework)).when(homeworkRepositoryTest).findById("test_id");
         doReturn(homework).when(homeworkRepositoryTest).save(any(Homework.class));
         assertEquals(homework, service.changeHomeworkById(homework,"test_id"));
+
+    }
+
+    @Test
+    @DisplayName("This tests changeHomeworkById service method when homework is not present")
+    void changeHomeworkByIdIfHomeworkNotPresentTestTest(){
+        doReturn(Optional.ofNullable(null)).when(homeworkRepositoryTest).findById("test_id");
+        assertEquals(null, service.changeHomeworkById(homework,"test_id"));
 
     }
 

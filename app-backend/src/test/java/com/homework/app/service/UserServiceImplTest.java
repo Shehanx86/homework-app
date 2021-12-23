@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
@@ -71,17 +72,43 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("This tests update user")
-    void updateUserTest() {
-        doReturn(Optional.of(user)).when(userRepositoryTest).findById(any(String.class));
+    @DisplayName("This tests update user if user exists")
+    void updateUserIfUserExistTest() {
+        doReturn(Optional.ofNullable(user)).when(userRepositoryTest).findById(any(String.class));
         doReturn(user).when(userRepositoryTest).save(any(User.class));
         assertEquals(user, service.updateUser("test_id", user));
     }
 
     @Test
-    @DisplayName("This tests delete user")
-    void deleteUserTest() {
-        doReturn(Optional.of(user)).when(userRepositoryTest).findById(any(String.class));
+    @DisplayName("This tests update user if user does not exist")
+    void updateUserIfUserNotExistTest() {
+        doReturn(Optional.ofNullable(null)).when(userRepositoryTest).findById(any(String.class));
+        assertEquals(null, service.updateUser("test_id", user));
+    }
+
+    @Test
+    @DisplayName("This tests delete user if user exists")
+    void deleteUserIfUserExistTest() {
+        doReturn(Optional.ofNullable(user)).when(userRepositoryTest).findById(any(String.class));
         assertEquals(user, service.deleteUser("test_id"));
+    }
+
+
+    @Test
+    @DisplayName("This tests delete user if user does not exist")
+    void deleteUserIfUserNotExistTest() {
+        doReturn(Optional.ofNullable(null)).when(userRepositoryTest).findById(any(String.class));
+        assertEquals(null, service.deleteUser("test_id"));
+    }
+
+    @Test
+    @DisplayName("This tests loadUserByUsername method")
+    void loadUserByUsername(){
+        org.springframework.security.core.userdetails.User userDetailsUser = new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                Arrays.asList(new SimpleGrantedAuthority(user.getRole())));
+        doReturn(user).when(mongoTemplateOperationsTest).getUserByUsername(any(String.class));
+        assertEquals(userDetailsUser, service.loadUserByUsername("test_user"));
     }
 }
