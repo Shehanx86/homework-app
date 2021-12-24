@@ -12,8 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.homework.app"})
-
 @EnableMongoRepositories(basePackageClasses = { HomeworkRepository.class , UserRepository.class})
+
 public class AppApplication {
 
 	@Bean
