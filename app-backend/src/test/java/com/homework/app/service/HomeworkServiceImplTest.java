@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,6 +38,11 @@ class HomeworkServiceImplTest {
         homework.setId("test_id");
         homework.setTitle("test_title");
         homework.setObjectives("test_objectives");
+        homework.setAssignedTo("test_assignedTo");
+        homework.setAssignedBy("test_assignedBy");
+        homework.setCreatedAt(new Date());
+        homework.setDeadline(new Date());
+        homework.setLastUpdatedAt(new Date());
     }
 
     @Test
@@ -61,6 +67,11 @@ class HomeworkServiceImplTest {
         homeworkPayload.setpId("test_id");
         homeworkPayload.setpTitle("test_title");
         homeworkPayload.setpObjectives("test_objectives");
+        homeworkPayload.setpAssignedTo("test_assignedTo");
+        homeworkPayload.setpAssignedBy("test_assignedBy");
+        homeworkPayload.setpCreatedAt(new Date());
+        homeworkPayload.setpDeadline(new Date());
+        homeworkPayload.setpLastUpdatedAt(new Date());
         doReturn(homework).when(homeworkRepositoryTest).save(any(Homework.class));
         assertEquals(homework, service.addHomework(homeworkPayload));
     }
@@ -95,6 +106,11 @@ class HomeworkServiceImplTest {
         homeworkPayload.setpId("test_id");
         homeworkPayload.setpTitle("test_title");
         homeworkPayload.setpObjectives("test_objectives");
+        homeworkPayload.setpAssignedTo("test_assignedTo");
+        homeworkPayload.setpAssignedBy("test_assignedBy");
+        homeworkPayload.setpCreatedAt(new Date());
+        homeworkPayload.setpDeadline(new Date());
+        homeworkPayload.setpLastUpdatedAt(new Date());
 
         doReturn(homework).when(homeworkRepositoryTest).save(any(Homework.class));
         assertEquals(homework, service.addHomework(homeworkPayload));
@@ -111,6 +127,11 @@ class HomeworkServiceImplTest {
         homeworkPayload.setpId("test_id");
         homeworkPayload.setpTitle("test_title");
         homeworkPayload.setpObjectives("test_objectives");
+        homeworkPayload.setpAssignedTo("test_assignedTo");
+        homeworkPayload.setpAssignedBy("test_assignedBy");
+        homeworkPayload.setpCreatedAt(new Date());
+        homeworkPayload.setpDeadline(new Date());
+        homeworkPayload.setpLastUpdatedAt(new Date());
 
         doReturn(Optional.ofNullable(null)).when(homeworkRepositoryTest).findById("test_id");
         assertEquals(null, service.changeHomeworkById(homeworkPayload,"test_id"));
