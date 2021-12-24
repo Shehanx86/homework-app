@@ -53,17 +53,28 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
     public User updateUser(String id, UserPayload userPayload){
 
         User user = new User();
-        user.setId(userPayload.getpId());
         user.setName(userPayload.getpName());
         user.setUsername(userPayload.getpUsername());
         user.setRole(userPayload.getpRole());
+        user.setPassword(userPayload.getpPassword());
 
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()){
-            User updatedUser = optionalUser.get();
-            updatedUser.setId(user.getId());
-            updatedUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepository.save(updatedUser);
+        Optional<User> currentUser = userRepository.findById(id);
+        if (currentUser.isPresent()){
+            User updatingUser = currentUser.get();
+
+            if(user.getUsername() != null){
+                updatingUser.setUsername(user.getUsername());
+            }
+            if(user.getName() != null){
+                updatingUser.setName(user.getName());
+            }
+            if(user.getRole() != null){
+                updatingUser.setRole(user.getRole());
+            }
+            if(user.getPassword() != null){
+                updatingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+            return userRepository.save(updatingUser);
         } else {
             return null;
         }
