@@ -59,22 +59,35 @@ public class HomeworkServiceImpl implements IHomeworkService {
     public Homework changeHomeworkById(HomeworkPayload homeworkPayload, String id){
 
         Homework newHomework = new Homework();
-        newHomework.setId(homeworkPayload.getpId());
         newHomework.setTitle(homeworkPayload.getpTitle());
         newHomework.setCreatedAt(homeworkPayload.getpCreatedAt());
         newHomework.setDeadline(homeworkPayload.getpDeadline());
         newHomework.setObjectives(homeworkPayload.getpObjectives());
         newHomework.setAssignedBy(homeworkPayload.getpAssignedBy());
         newHomework.setAssignedTo(homeworkPayload.getpAssignedTo());
-        newHomework.setLastUpdatedAt(new Date());
 
         Optional<Homework> currentHomework = hwRepository.findById(id);
 
         if(currentHomework.isPresent()){
-            newHomework = currentHomework.get();
-            newHomework.setId(currentHomework.get().getId());
-            newHomework.setLastUpdatedAt(new Date());
-            return hwRepository.save(newHomework);
+            Homework UpdatingHomework = currentHomework.get();
+            UpdatingHomework.setLastUpdatedAt(new Date());
+
+            if (newHomework.getTitle() != null){
+                UpdatingHomework.setTitle(newHomework.getTitle());
+            }
+            if (newHomework.getDeadline() != null){
+                UpdatingHomework.setDeadline(newHomework.getDeadline());
+            }
+            if (newHomework.getObjectives() != null){
+                UpdatingHomework.setObjectives(newHomework.getObjectives());
+            }
+            if (newHomework.getAssignedBy() != null){
+                UpdatingHomework.setAssignedBy(newHomework.getAssignedBy());
+            }
+            if (newHomework.getAssignedTo() != null){
+                UpdatingHomework.setAssignedTo(newHomework.getAssignedTo());
+            }
+            return hwRepository.save(UpdatingHomework);
         } else {
             return null;
         }
