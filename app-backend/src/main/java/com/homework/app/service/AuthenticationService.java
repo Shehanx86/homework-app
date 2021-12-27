@@ -1,6 +1,7 @@
 package com.homework.app.service;
 
 import com.homework.app.filter.CustomAuthenticationFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import static com.homework.app.util.UtilJWT.createToken;
 import static javax.servlet.http.HttpServletResponse.*;
 
 @Service
+@AllArgsConstructor
 public class AuthenticationService {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -25,11 +27,6 @@ public class AuthenticationService {
 
     public AuthenticationService(){
         customAuthenticationFilter = new CustomAuthenticationFilter();
-    }
-
-    public AuthenticationService(AuthenticationManager authenticationManager, CustomAuthenticationFilter customAuthenticationFilter){
-        this.authenticationManager = authenticationManager;
-        this.customAuthenticationFilter = customAuthenticationFilter;
     }
 
     public String login(HttpServletRequest request, HttpServletResponse response){

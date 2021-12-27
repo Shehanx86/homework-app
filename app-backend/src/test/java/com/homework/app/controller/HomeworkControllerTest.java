@@ -2,6 +2,7 @@ package com.homework.app.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homework.app.model.Homework;
 import com.homework.app.payload.HomeworkPayload;
+import com.homework.app.payload.StatusPayload;
 import com.homework.app.service.HomeworkServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -113,8 +114,32 @@ class HomeworkControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/homework/student/test_username")
                         .header("Authorization", "Bearer "+ access_token_role_student))
+                .andExpect(status().is(SC_FORBIDDEN));
+    }
+
+    @Test
+    @DisplayName("This tests api/homework/student get request by role student")
+    void getHomeworkOfCurrentlyLoggedInStudentByRoleStudent() throws Exception {
+
+        doReturn(Arrays.asList(homework)).when(service).getHomeworksOfLoggedInStudent();
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/homework/student")
+                        .header("Authorization", "Bearer "+ access_token_role_student))
                 .andExpect(status().is(SC_OK));
     }
+
+    @Test
+    @DisplayName("This tests api/homework/student get request by role teacher")
+    void getHomeworkOfCurrentlyLoggedInStudentByRoleTeacher() throws Exception {
+
+        doReturn(Arrays.asList(homework)).when(service).getHomeworksOfLoggedInStudent();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/homework/student")
+                        .header("Authorization", "Bearer "+ access_token_role_teacher))
+                .andExpect(status().is(SC_FORBIDDEN));
+    }
+
     @Test
     @DisplayName("This tests api/homework/id post request with role teacher")
     void addHomeworkByTeacherRoleTest() throws Exception {
@@ -176,10 +201,16 @@ class HomeworkControllerTest {
     @Test
     @DisplayName("This tests homework status change by student role")
     void changeHomeworkStatusByStudentToleTest() throws Exception {
-        doReturn(homework).when(service).changeHomeworkStatus("test_status", "test_id");
+        StatusPayload statusPayload = new StatusPayload();
+        statusPayload.setStatus("test_status");
+
+        doReturn(homework).when(service).changeHomeworkStatus(any(StatusPayload.class), eq("test_id"));
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/homework/status/test_id/test_status")
-                        .header("Authorization", "Bearer "+ access_token_role_student))
+                MockMvcRequestBuilders.put("/api/homework/status/test_id")
+                        .header("Authorization", "Bearer "+ access_token_role_student)
+                        .content(asJsonString(statusPayload))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(SC_OK));
     }
 

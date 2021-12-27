@@ -2,11 +2,14 @@ package com.homework.app.service;
 
 import com.homework.app.model.Homework;
 import com.homework.app.payload.HomeworkPayload;
+import com.homework.app.payload.StatusPayload;
 import com.homework.app.respository.HomeworkRepository;
 import com.homework.app.respository.MongoTemplateOperations;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
@@ -18,10 +21,10 @@ import java.util.Optional;
 public class HomeworkServiceImpl implements IHomeworkService {
 
     @Autowired
-    HomeworkRepository hwRepository;
+    private HomeworkRepository hwRepository;
 
     @Autowired
-    MongoTemplateOperations mongoTemplateOperations;
+    private MongoTemplateOperations mongoTemplateOperations;
 
     public Optional<Homework> getHomeworkById(String id){
         return hwRepository.findById(id);
@@ -35,21 +38,21 @@ public class HomeworkServiceImpl implements IHomeworkService {
         Homework newHomework = new Homework();
         newHomework.setId(homeworkPayload.getpId());
         newHomework.setTitle(homeworkPayload.getpTitle());
-        newHomework.setLastUpdatedAt(homeworkPayload.getpLastUpdatedAt());
+        newHomework.setLastUpdatedAt(new Date());
         newHomework.setDeadline(homeworkPayload.getpDeadline());
         newHomework.setObjectives(homeworkPayload.getpObjectives());
-        newHomework.setAssignedBy(homeworkPayload.getpAssignedBy());
+        newHomework.setAssignedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         newHomework.setAssignedTo(homeworkPayload.getpAssignedTo());
         newHomework.setCreatedAt(new Date());
 
         return hwRepository.save(newHomework);
     }
 
-    public Homework changeHomeworkStatus(String status, String id){
+    public Homework changeHomeworkStatus(StatusPayload status, String id){
         Optional<Homework> homework= hwRepository.findById(id);
         if(homework.isPresent()){
             Homework updatedHomework = homework.get();
-            updatedHomework.setStatus(status);
+            updatedHomework.setStatus(status.getStatus());
             return hwRepository.save(updatedHomework);
         } else {
             return null;
@@ -95,6 +98,10 @@ public class HomeworkServiceImpl implements IHomeworkService {
 
     public List<Homework> getHomeworksByStudentUsername(String username){
         return mongoTemplateOperations.getHomeworksByStudentUsername(username);
+    }
+
+    public List<Homework> getHomeworksOfLoggedInStudent(){
+        return mongoTemplateOperations.getHomeworksOfLoggedInStudent();
     }
 
     public String deleteHomework(String id) {

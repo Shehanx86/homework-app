@@ -4,7 +4,6 @@ import com.homework.app.model.User;
 import com.homework.app.payload.UserPayload;
 import com.homework.app.respository.MongoTemplateOperations;
 import com.homework.app.respository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements IUserService, UserDetailsService {
 
     private MongoTemplateOperations mongoTemplateOperations;

@@ -3,14 +3,20 @@ package com.homework.app.service;
 
 import com.homework.app.model.Homework;
 import com.homework.app.payload.HomeworkPayload;
+import com.homework.app.payload.StatusPayload;
 import com.homework.app.respository.HomeworkRepository;
 import com.homework.app.respository.MongoTemplateOperations;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -72,6 +78,13 @@ class HomeworkServiceImplTest {
         homeworkPayload.setpCreatedAt(new Date());
         homeworkPayload.setpDeadline(new Date());
         homeworkPayload.setpLastUpdatedAt(new Date());
+
+        Authentication authentication = Mockito.mock(Authentication.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        doReturn(authentication).when(securityContext).getAuthentication();
+        doReturn("username").when(authentication).getName();
+        SecurityContextHolder.setContext(securityContext);
+
         doReturn(homework).when(homeworkRepositoryTest).save(any(Homework.class));
         assertEquals(homework, service.addHomework(homeworkPayload));
     }
@@ -79,9 +92,11 @@ class HomeworkServiceImplTest {
     @Test
     @DisplayName("This tests home status change when homework presents")
     void changeHomeworkStatusIfHomeworkPresentTest(){
+        StatusPayload statusPayload = new StatusPayload();
+        statusPayload.setStatus("test_status");
         doReturn(Optional.ofNullable(homework)).when(homeworkRepositoryTest).findById("test_id");
         doReturn(homework).when(homeworkRepositoryTest).save(homework);
-        assertEquals(homework, service.changeHomeworkStatus("test_status","test_id"));
+        assertEquals(homework, service.changeHomeworkStatus(statusPayload,"test_id"));
     }
 
     @Test
@@ -94,8 +109,10 @@ class HomeworkServiceImplTest {
     @Test
     @DisplayName("This tests home status change when homework is not present")
     void changeHomeworkStatusIfHomeworkNotPresentTest(){
+        StatusPayload statusPayload = new StatusPayload();
+        statusPayload.setStatus("test_status");
         doReturn(Optional.ofNullable(null)).when(homeworkRepositoryTest).findById("test_id");
-        assertEquals(null, service.changeHomeworkStatus("test_status","test_id"));
+        assertEquals(null, service.changeHomeworkStatus(statusPayload,"test_id"));
     }
 
 
@@ -111,6 +128,12 @@ class HomeworkServiceImplTest {
         homeworkPayload.setpCreatedAt(new Date());
         homeworkPayload.setpDeadline(new Date());
         homeworkPayload.setpLastUpdatedAt(new Date());
+
+        Authentication authentication = Mockito.mock(Authentication.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        doReturn(authentication).when(securityContext).getAuthentication();
+        doReturn("username").when(authentication).getName();
+        SecurityContextHolder.setContext(securityContext);
 
         doReturn(homework).when(homeworkRepositoryTest).save(any(Homework.class));
         assertEquals(homework, service.addHomework(homeworkPayload));
@@ -135,6 +158,18 @@ class HomeworkServiceImplTest {
 
         doReturn(Optional.ofNullable(null)).when(homeworkRepositoryTest).findById("test_id");
         assertEquals(null, service.changeHomeworkById(homeworkPayload,"test_id"));
+
+    }
+
+    public List<Homework> getHomeworksOfLoggedInStudent(){
+        return mongoTemplateOperations.getHomeworksOfLoggedInStudent();
+    }
+
+    @Test
+    @DisplayName("This tests getting homeworks of currently logged in student")
+    void getHomeworksOfLoggedInStudentTest(){
+        doReturn(Arrays.asList(homework)).when(mongoTemplateOperations).getHomeworksOfLoggedInStudent();
+        assertEquals(Arrays.asList(homework), service.getHomeworksOfLoggedInStudent());
 
     }
 
