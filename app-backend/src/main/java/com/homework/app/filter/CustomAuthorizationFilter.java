@@ -27,7 +27,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if(request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/token/refresh") || request.getServletPath().startsWith("/api/test")) {
+        if(request.getServletPath().equals("/api/login") ||
+                request.getServletPath().equals("/api/token/refresh") ||
+                request.getServletPath().startsWith("/api/test") ||
+                request.getServletPath().startsWith("/swagger-ui")) {
             filterChain.doFilter(request, response);
         } else {
             try {
@@ -42,7 +45,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 });
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
                 filterChain.doFilter(request, response);
 
             } catch (Exception error){

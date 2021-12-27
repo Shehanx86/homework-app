@@ -1,5 +1,6 @@
 package com.homework.app.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -7,10 +8,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
 
     @Id
+    @ApiModelProperty(notes = "The unique id of the user",example = "1234", required = true)
     private String id;
+    @ApiModelProperty(notes = "The name of the user",example = "Shehan")
     private String name;
+    @ApiModelProperty(notes = "The username of the user",example = "Shehan_123")
     private String username;
+    @ApiModelProperty(notes = "The password of the user",example = "abc123@")
     private String password;
+    @ApiModelProperty(notes = "The role of the user", value = "teacher/student")
     private String role;
 
     public User() {

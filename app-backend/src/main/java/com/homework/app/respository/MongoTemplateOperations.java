@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,9 +14,9 @@ import java.util.List;
 @Component
 public class MongoTemplateOperations {
 
-    @Autowired
     private MongoTemplate mongoTemplate;
 
+    @Autowired
     public MongoTemplateOperations(MongoTemplate mongoTemplate){
         this.mongoTemplate = mongoTemplate;
     }
@@ -36,6 +37,12 @@ public class MongoTemplateOperations {
     public List<Homework> getHomeworksByStudentUsername(String studentUsername){
         Query query = new Query();
         query.addCriteria(Criteria.where("assignedTo").is(studentUsername));
+        return mongoTemplate.find(query, Homework.class);
+    }
+
+    public List<Homework> getHomeworksOfLoggedInStudent(){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("assignedTo").is(SecurityContextHolder.getContext().getAuthentication().getName()));
         return mongoTemplate.find(query, Homework.class);
     }
 

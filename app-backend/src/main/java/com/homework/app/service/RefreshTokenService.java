@@ -2,7 +2,6 @@ package com.homework.app.service;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.homework.app.model.User;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
@@ -16,20 +15,18 @@ import static com.homework.app.util.TokenTester.validateToken;
 import static com.homework.app.util.UtilJWT.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-
 /**
  * creates new access token after expiration
  */
 @Service
-@NoArgsConstructor
 public class RefreshTokenService {
 
+    private UserServiceImpl userService;
+
+    @Autowired
     public RefreshTokenService(UserServiceImpl userService){
         this.userService = userService;
     }
-
-    @Autowired
-    UserServiceImpl userService;
 
     public String createNewAccessToken(HttpServletRequest request, HttpServletResponse response) {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
