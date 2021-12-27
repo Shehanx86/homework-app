@@ -6,9 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Arrays;
 
@@ -62,4 +66,16 @@ class MongoTemplateOperationsTest {
         assertEquals(Arrays.asList(homework), mongoTemplateOperations.getHomeworksByStudentUsername("test_username"));
     }
 
+    @Test
+    @DisplayName("This tests getting homework of currently logged in student's username")
+    void getHomeworksOfLoggedInStudentTest() {
+        Authentication authentication = Mockito.mock(Authentication.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        doReturn(authentication).when(securityContext).getAuthentication();
+        doReturn("username").when(authentication).getName();
+        SecurityContextHolder.setContext(securityContext);
+
+        doReturn(Arrays.asList(homework)).when(mongoTemplate).find(any(Query.class), eq(Homework.class));
+        assertEquals(Arrays.asList(homework), mongoTemplateOperations.getHomeworksOfLoggedInStudent());
+    }
 }
