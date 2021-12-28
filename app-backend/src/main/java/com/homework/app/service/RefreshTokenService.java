@@ -1,7 +1,12 @@
 package com.homework.app.service;
 
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.homework.app.exception.InvalidTokenException;
 import com.homework.app.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +26,8 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Service
 public class RefreshTokenService {
 
+    private final Logger logger = LoggerFactory.getLogger(RefreshTokenService.class);
+
     private UserServiceImpl userService;
 
     @Autowired
@@ -31,38 +38,42 @@ public class RefreshTokenService {
     public String createNewAccessToken(HttpServletRequest request, HttpServletResponse response) {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
-        /**
-         * checks if received refresh token is valid
-         */
-            try{
-                validateToken(authorizationHeader);
+        try {
+            validateToken(authorizationHeader);
 
-                DecodedJWT decodedJWT = decodeToken(authorizationHeader);
+            DecodedJWT decodedJWT = decodeToken(authorizationHeader);
+            String username = decodedJWT.getSubject();
+            Date expiresAt = new Date(System.currentTimeMillis() + 10 * 60 * 1000);
+            String issuer =  request.getRequestURL().toString();
+            User user = userService.getUserByUsername(username);
+            List<String> roles = Arrays.asList(user.getRole());
 
-                String username = decodedJWT.getSubject();
-                Date expiresAt = new Date(System.currentTimeMillis() + 10 * 60 * 1000);
-                String issuer =  request.getRequestURL().toString();
-                User user = userService.getUserByUsername(username);
-                List<String> roles = Arrays.asList(user.getRole());
+            String newAccessToken = createToken(
+                    username,
+                    expiresAt,
+                    issuer,
+                    CLAIM,
+                    roles
+            );
+            logger.info("New access token created.");
+            response.setStatus(SC_OK);
+            response.setHeader("access_token", newAccessToken);
+            return "New access token created";
 
-                /**
-                 * creates new access token
-                 */
-                String newAccessToken = createToken(
-                        username,
-                        expiresAt,
-                        issuer,
-                        CLAIM,
-                        roles
-                );
+        } catch (JWTCreationException error) {
+            logger.error("Couldn't create new token. ",error);
+            response.setStatus(SC_INTERNAL_SERVER_ERROR);
+            return "A new access token was not created " + error.getMessage() ;
 
-                response.setStatus(SC_OK);
-                response.setHeader("access_token", newAccessToken);
-                return "New access token created";
+        } catch (JWTVerificationException error ) {
+            logger.error("Couldn't decode refresh token. ", error);
+            response.setStatus(SC_FORBIDDEN);
+            return "Couldn't decode refresh token. " + error.getMessage();
 
-            } catch (Exception error){
-                response.setStatus(SC_FORBIDDEN);
-                return "A new access token was not created "+error.getMessage();
-            }
+        } catch (InvalidTokenException error){
+            logger.error("Invalid refresh token. ",error);
+            response.setStatus(SC_FORBIDDEN);
+            return "Invalid refresh token." + error.getMessage();
+        }
     }
 }

@@ -3,6 +3,8 @@ package com.homework.app.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.util.Date;
@@ -15,14 +17,14 @@ public class UtilJWT {
     public static final String SECRET = "secret";
     public static final String CLAIM = "roles";
 
-    public static DecodedJWT decodeToken(String token){
+    public static DecodedJWT decodeToken(String token) throws IllegalArgumentException, JWTVerificationException {
         String refreshToken = token.substring("Bearer ".length());
         Algorithm algorithm = Algorithm.HMAC256(SECRET.getBytes());
         JWTVerifier verifier = JWT.require(algorithm).build();
         return verifier.verify(refreshToken);
     }
 
-    public static String createToken(String username, Date expiresAt, String issuer, String claimName, List<String> claimList){
+    public static String createToken(String username, Date expiresAt, String issuer, String claimName, List<String> claimList) throws JWTCreationException {
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(expiresAt)

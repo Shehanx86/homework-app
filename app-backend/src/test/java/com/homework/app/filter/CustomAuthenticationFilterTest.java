@@ -47,7 +47,7 @@ class CustomAuthenticationFilterTest {
     }
 
     @Test
-    @DisplayName("This tests attempAuthentication")
+    @DisplayName("This tests attemptAuthentication")
     void attemptAuthenticationTest() {
         doReturn(resultAuthentication).when(authenticationManager).authenticate(inputAuthentication);
         assertEquals(resultAuthentication, customAuthenticationFilter.attemptAuthentication(request, response));

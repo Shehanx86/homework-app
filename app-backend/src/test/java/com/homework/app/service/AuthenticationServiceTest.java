@@ -64,13 +64,4 @@ class AuthenticationServiceTest {
         AuthenticationService authenticationService = new AuthenticationService(authenticationManager,customAuthenticationFilter);
         assertEquals("login successful", authenticationService.login(request, response));
     }
-
-    @Test
-    @DisplayName("This tests user login unsuccessful")
-    void loginUnSuccessTest() {
-        doReturn(null).when(customAuthenticationFilter).attemptAuthentication(any(HttpServletRequest.class), any(HttpServletResponse.class));
-        AuthenticationService authenticationService = new AuthenticationService(authenticationManager,customAuthenticationFilter);
-        assertEquals("login unsuccessful", authenticationService.login(request, response).substring(0, 18));
-    }
-
 }

@@ -71,4 +71,13 @@ class RefreshTokenServiceTest {
         refreshTokenService.createNewAccessToken(request, response);
         assertEquals(403, response.getStatus());
     }
+
+    @Test
+    @DisplayName("This tests creating new access token with unverified refresh tokens")
+    void createNewAccessTokenWithUnverifiedAccessToken() {
+        request.addHeader("Authorization", "Bearer unverified_refresh_token");
+        doReturn(user).when(userService).getUserByUsername(any(String.class));
+        refreshTokenService.createNewAccessToken(request, response);
+        assertEquals(403, response.getStatus());
+    }
 }

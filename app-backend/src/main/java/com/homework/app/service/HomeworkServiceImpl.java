@@ -7,8 +7,9 @@ import com.homework.app.respository.HomeworkRepository;
 import com.homework.app.respository.MongoTemplateOperations;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.Date;
@@ -19,6 +20,8 @@ import java.util.Optional;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HomeworkServiceImpl implements IHomeworkService {
+
+    private final Logger logger = LoggerFactory.getLogger(HomeworkServiceImpl.class);
 
     @Autowired
     private HomeworkRepository hwRepository;
@@ -44,7 +47,7 @@ public class HomeworkServiceImpl implements IHomeworkService {
         newHomework.setAssignedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         newHomework.setAssignedTo(homeworkPayload.getpAssignedTo());
         newHomework.setCreatedAt(new Date());
-
+        logger.info("Homework added successfully.");
         return hwRepository.save(newHomework);
     }
 
@@ -53,8 +56,10 @@ public class HomeworkServiceImpl implements IHomeworkService {
         if(homework.isPresent()){
             Homework updatedHomework = homework.get();
             updatedHomework.setStatus(status.getStatus());
+            logger.info("Homework's status changed successfully.");
             return hwRepository.save(updatedHomework);
         } else {
+            logger.info("No homework found with the provided ID.");
             return null;
         }
     }
@@ -90,8 +95,10 @@ public class HomeworkServiceImpl implements IHomeworkService {
             if (newHomework.getAssignedTo() != null){
                 UpdatingHomework.setAssignedTo(newHomework.getAssignedTo());
             }
+            logger.info("Homework changed successfully.");
             return hwRepository.save(UpdatingHomework);
         } else {
+            logger.info("No homework found with the provided ID.");
             return null;
         }
     }
@@ -106,6 +113,7 @@ public class HomeworkServiceImpl implements IHomeworkService {
 
     public String deleteHomework(String id) {
         hwRepository.deleteById(id);
+        logger.info("homework deleted.");
         return "Homework " + id + " deleted";
     }
 }
