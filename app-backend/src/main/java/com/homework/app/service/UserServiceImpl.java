@@ -4,6 +4,8 @@ import com.homework.app.model.User;
 import com.homework.app.payload.UserPayload;
 import com.homework.app.respository.MongoTemplateOperations;
 import com.homework.app.respository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +20,8 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements IUserService, UserDetailsService {
+
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private MongoTemplateOperations mongoTemplateOperations;
     private UserRepository userRepository;
@@ -37,6 +41,7 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         user.setUsername(userPayload.getpUsername());
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(userPayload.getpPassword()));
+        logger.info("User "+role+" added successfully");
         return userRepository.save(user);
     }
 
@@ -72,8 +77,10 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
             if(user.getPassword() != null){
                 updatingUser.setPassword(passwordEncoder.encode(user.getPassword()));
             }
+            logger.info("User updated added successfully");
             return userRepository.save(updatingUser);
         } else {
+            logger.info("User was not found");
             return null;
         }
     }
@@ -83,8 +90,10 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         if (optionalUser.isPresent()){
             User deletedUser = optionalUser.get();
             userRepository.delete(deletedUser);
+            logger.info("User updated added successfully");
             return deletedUser;
         } else {
+            logger.info("User was not found");
             return null;
         }
     }
@@ -98,6 +107,7 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         User user = mongoTemplateOperations.getUserByUsername(username);
 
         if(user == null){
+            logger.info("User was not found");
             throw new UsernameNotFoundException(username + " user not found");
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
