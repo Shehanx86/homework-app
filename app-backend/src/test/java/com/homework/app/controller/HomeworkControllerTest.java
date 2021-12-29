@@ -108,6 +108,17 @@ class HomeworkControllerTest {
 
     @Test
     @DisplayName("This tests api/homework/id get request with role student")
+    void getHomeworkByStudentUsernameByTeacherRoleTest() throws Exception {
+
+        doReturn(Arrays.asList(homework)).when(service).getHomeworksByStudentUsername("test_username");
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/homework/student/test_username")
+                        .header("Authorization", "Bearer "+ access_token_role_teacher))
+                .andExpect(status().is(SC_OK));
+    }
+
+    @Test
+    @DisplayName("This tests api/homework/id get request with role student")
     void getHomeworkByStudentUsernameByStudentRoleTest() throws Exception {
 
         doReturn(Arrays.asList(homework)).when(service).getHomeworksByStudentUsername("test_username");

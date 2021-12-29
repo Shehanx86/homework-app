@@ -74,6 +74,7 @@ class HomeworkServiceImplTest {
         homeworkPayload.setpTitle("test_title");
         homeworkPayload.setpObjectives("test_objectives");
         homeworkPayload.setpAssignedTo("test_assignedTo");
+        homeworkPayload.setpStatus("test_status");
         homeworkPayload.setpAssignedBy("test_assignedBy");
         homeworkPayload.setpCreatedAt(new Date());
         homeworkPayload.setpDeadline(new Date());
@@ -125,6 +126,7 @@ class HomeworkServiceImplTest {
         homeworkPayload.setpObjectives("test_objectives");
         homeworkPayload.setpAssignedTo("test_assignedTo");
         homeworkPayload.setpAssignedBy("test_assignedBy");
+        homeworkPayload.setpStatus("test_status");
         homeworkPayload.setpCreatedAt(new Date());
         homeworkPayload.setpDeadline(new Date());
         homeworkPayload.setpLastUpdatedAt(new Date());
@@ -151,6 +153,7 @@ class HomeworkServiceImplTest {
         homeworkPayload.setpTitle("test_title");
         homeworkPayload.setpObjectives("test_objectives");
         homeworkPayload.setpAssignedTo("test_assignedTo");
+        homeworkPayload.setpStatus("test_status");
         homeworkPayload.setpAssignedBy("test_assignedBy");
         homeworkPayload.setpCreatedAt(new Date());
         homeworkPayload.setpDeadline(new Date());

@@ -49,6 +49,15 @@ class CustomAuthorizationFilterTest {
     }
 
     @Test
+    @DisplayName("This tests authorization filter with unverified access token")
+    void doFilterInternalWithNotVerifiedTokenTest() throws ServletException, IOException {
+
+        request.addHeader("Authorization", "Bearer not_verified" );
+        customAuthorizationFilter.doFilterInternal(request, response, filterChain);
+        assertEquals(403, response.getStatus());
+    }
+
+    @Test
     @DisplayName("This tests authorization filter with valid access token")
     void doFilterInternalWithValidTokenTest() throws ServletException, IOException {
 

@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -55,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(STATELESS);
 
         http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh/**", "/api/test/**", "/swagger-ui/**").permitAll();
-        http.authorizeRequests().antMatchers(GET, "api/homework/student/**").hasAnyAuthority( "student", "teacher");
+        http.authorizeRequests().antMatchers(GET, "api/homework/student").hasAnyAuthority( "student");
         http.authorizeRequests().antMatchers(PUT, "api/homework/status/**").hasAnyAuthority("student");
         http.authorizeRequests().antMatchers( "api/homework/**").hasAnyAuthority("teacher");
         http.authorizeRequests().antMatchers( "api/users/**").hasAnyAuthority("teacher");
