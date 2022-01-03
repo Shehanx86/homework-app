@@ -49,6 +49,13 @@ public class HomeworkController {
         return service.getHomeworksOfLoggedInStudent();
     }
 
+    @ApiOperation(value = "Retrieve homeworks created by logged in teacher", notes = "Retrieve all homeworks created by the currently logged in teacher, only authorized to teacher")
+    @GetMapping("/teacher")
+    @PreAuthorize("hasAnyAuthority('teacher')")
+    public List<Homework> getHomeworksOfLoggedInTeacher(){
+        return service.getHomeworksOfLoggedInTeacher();
+    }
+
     @ApiOperation(value = "Retrieve homeworks by student username", notes = "Retrieve all homeworks by assigned student username")
     @GetMapping("/student/{username}")
     @PreAuthorize("hasAnyAuthority('teacher')")
@@ -73,7 +80,7 @@ public class HomeworkController {
     @ApiOperation(value = "Delete homework's status by id", notes = "Delete homework's status by its id, only authorized to teachers")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('teacher')")
-    public String deleteHomework(@PathVariable String id){
+    public Homework deleteHomework(@PathVariable String id){
         return service.deleteHomework(id);
     }
 

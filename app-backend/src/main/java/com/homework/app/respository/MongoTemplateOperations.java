@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -46,4 +47,9 @@ public class MongoTemplateOperations {
         return mongoTemplate.find(query, Homework.class);
     }
 
+    public List<Homework> getHomeworksOfLoggedInTeacher(){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("assignedBy").is(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return mongoTemplate.find(query, Homework.class);
+    }
 }

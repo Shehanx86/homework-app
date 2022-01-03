@@ -1,6 +1,7 @@
 package com.homework.app.service;
 
 import com.homework.app.model.Homework;
+import com.homework.app.model.User;
 import com.homework.app.payload.HomeworkPayload;
 import com.homework.app.payload.StatusPayload;
 import com.homework.app.respository.HomeworkRepository;
@@ -12,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +51,7 @@ public class HomeworkServiceImpl implements IHomeworkService {
         newHomework.setAssignedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         newHomework.setAssignedTo(homeworkPayload.getpAssignedTo());
         newHomework.setCreatedAt(new Date());
+        newHomework.setStatus("Not Finished");
         logger.info("Homework added successfully.");
         return hwRepository.save(newHomework);
     }
@@ -111,10 +116,21 @@ public class HomeworkServiceImpl implements IHomeworkService {
         return mongoTemplateOperations.getHomeworksOfLoggedInStudent();
     }
 
-    public String deleteHomework(String id) {
-        hwRepository.deleteById(id);
-        logger.info("homework deleted.");
-        return "Homework " + id + " deleted";
+    public List<Homework> getHomeworksOfLoggedInTeacher(){
+        return mongoTemplateOperations.getHomeworksOfLoggedInTeacher();
+    }
+
+    public Homework deleteHomework(String id) {
+        Optional<Homework> optionalHomework = hwRepository.findById(id);
+        if (optionalHomework.isPresent()){
+            Homework deletedHomework = optionalHomework.get();
+            hwRepository.delete(deletedHomework);
+            logger.info("homework deleted.");
+            return deletedHomework;
+        } else {
+            logger.info("homework was not found");
+            return null;
+        }
     }
 }
 

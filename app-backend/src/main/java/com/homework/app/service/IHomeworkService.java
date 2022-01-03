@@ -12,6 +12,6 @@ public interface IHomeworkService {
     List<Homework> getAllHomeworks();
     Homework addHomework(HomeworkPayload homeworkPayload);
     Homework changeHomeworkById(HomeworkPayload homeworkPayload, String id);
-    String deleteHomework(String id);
+    Homework deleteHomework(String id);
     List<Homework> getHomeworksByStudentUsername(String username);
 }
