@@ -41,7 +41,7 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         user.setUsername(userPayload.getpUsername());
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(userPayload.getpPassword()));
-        logger.info("User "+role+" added successfully");
+        logger.info("User added successfully");
         return userRepository.save(user);
     }
 

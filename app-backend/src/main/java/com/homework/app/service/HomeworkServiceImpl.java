@@ -1,7 +1,6 @@
 package com.homework.app.service;
 
 import com.homework.app.model.Homework;
-import com.homework.app.model.User;
 import com.homework.app.payload.HomeworkPayload;
 import com.homework.app.payload.StatusPayload;
 import com.homework.app.respository.HomeworkRepository;
@@ -14,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -82,26 +79,26 @@ public class HomeworkServiceImpl implements IHomeworkService {
         Optional<Homework> currentHomework = hwRepository.findById(id);
 
         if(currentHomework.isPresent()){
-            Homework UpdatingHomework = currentHomework.get();
-            UpdatingHomework.setLastUpdatedAt(new Date());
+            Homework updatingHomework = currentHomework.get();
+            updatingHomework.setLastUpdatedAt(new Date());
 
             if (newHomework.getTitle() != null){
-                UpdatingHomework.setTitle(newHomework.getTitle());
+                updatingHomework.setTitle(newHomework.getTitle());
             }
             if (newHomework.getDeadline() != null){
-                UpdatingHomework.setDeadline(newHomework.getDeadline());
+                updatingHomework.setDeadline(newHomework.getDeadline());
             }
             if (newHomework.getObjectives() != null){
-                UpdatingHomework.setObjectives(newHomework.getObjectives());
+                updatingHomework.setObjectives(newHomework.getObjectives());
             }
             if (newHomework.getAssignedBy() != null){
-                UpdatingHomework.setAssignedBy(newHomework.getAssignedBy());
+                updatingHomework.setAssignedBy(newHomework.getAssignedBy());
             }
             if (newHomework.getAssignedTo() != null){
-                UpdatingHomework.setAssignedTo(newHomework.getAssignedTo());
+                updatingHomework.setAssignedTo(newHomework.getAssignedTo());
             }
             logger.info("Homework changed successfully.");
-            return hwRepository.save(UpdatingHomework);
+            return hwRepository.save(updatingHomework);
         } else {
             logger.info("No homework found with the provided ID.");
             return null;

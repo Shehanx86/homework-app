@@ -172,7 +172,13 @@ class HomeworkServiceImplTest {
     void getHomeworksOfLoggedInStudentTest(){
         doReturn(Arrays.asList(homework)).when(mongoTemplateOperations).getHomeworksOfLoggedInStudent();
         assertEquals(Arrays.asList(homework), service.getHomeworksOfLoggedInStudent());
+    }
 
+    @Test
+    @DisplayName("This tests getting homeworks of currently logged in teacher")
+    void getHomeworksOfLoggedInTeacherTest(){
+        doReturn(Arrays.asList(homework)).when(mongoTemplateOperations).getHomeworksOfLoggedInTeacher();
+        assertEquals(Arrays.asList(homework), service.getHomeworksOfLoggedInTeacher());
     }
 
     @Test
