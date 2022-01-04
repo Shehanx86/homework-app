@@ -152,6 +152,17 @@ class HomeworkControllerTest {
     }
 
     @Test
+    @DisplayName("This tests api/homework/teacher get request by role teacher")
+    void getHomeworkOfCurrentlyLoggedInTeacherByRoleTeacher() throws Exception {
+
+        doReturn(Arrays.asList(homework)).when(service).getHomeworksOfLoggedInTeacher();
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/homework/teacher")
+                        .header("Authorization", "Bearer "+ access_token_role_teacher))
+                .andExpect(status().is(SC_OK));
+    }
+
+    @Test
     @DisplayName("This tests api/homework/id post request with role teacher")
     void addHomeworkByTeacherRoleTest() throws Exception {
 
@@ -229,22 +240,27 @@ class HomeworkControllerTest {
     @DisplayName("This tests api/homework/id delete request with role teacher")
     void deleteHomeworkByTeacherRolesTest() throws Exception {
 
-        doReturn("Homework test_id deleted").when(service).deleteHomework("test_id");
+        doReturn(homework).when(service).deleteHomework("test_id");
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/homework/test_id")
-                .header("Authorization", "Bearer "+ access_token_role_teacher))
-                .andExpect(content().string("Homework test_id deleted"))
-                .andExpect(status().is(200));
+                .header("Authorization", "Bearer "+ access_token_role_teacher)
+                .content(asJsonString(homework))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(SC_OK));
     }
 
     @Test
     @DisplayName("This tests api/homework/id delete request with role student")
     void deleteHomeworkByStudentRolesTest() throws Exception {
 
-        doReturn("Homework test_id deleted").when(service).deleteHomework("test_id");
+        doReturn(homework).when(service).deleteHomework("test_id");
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/homework/test_id")
-                        .header("Authorization", "Bearer "+ access_token_role_student))
+                        .header("Authorization", "Bearer "+ access_token_role_student)
+                .content(asJsonString(homework))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(SC_FORBIDDEN));
     }
 

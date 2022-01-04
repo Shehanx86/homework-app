@@ -46,4 +46,9 @@ public class MongoTemplateOperations {
         return mongoTemplate.find(query, Homework.class);
     }
 
+    public List<Homework> getHomeworksOfLoggedInTeacher(){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("assignedBy").is(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return mongoTemplate.find(query, Homework.class);
+    }
 }

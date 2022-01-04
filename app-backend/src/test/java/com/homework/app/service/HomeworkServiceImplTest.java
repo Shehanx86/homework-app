@@ -9,7 +9,7 @@ import com.homework.app.respository.MongoTemplateOperations;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,8 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
-
-@DataMongoTest
+@SpringBootTest
 class HomeworkServiceImplTest {
 
     private HomeworkServiceImpl service;
@@ -173,13 +172,27 @@ class HomeworkServiceImplTest {
     void getHomeworksOfLoggedInStudentTest(){
         doReturn(Arrays.asList(homework)).when(mongoTemplateOperations).getHomeworksOfLoggedInStudent();
         assertEquals(Arrays.asList(homework), service.getHomeworksOfLoggedInStudent());
-
     }
 
     @Test
-    @DisplayName("This deleteHomework service method")
-    void deleteHomework(){
-        assertEquals("Homework test_id deleted", service.deleteHomework("test_id"));
+    @DisplayName("This tests getting homeworks of currently logged in teacher")
+    void getHomeworksOfLoggedInTeacherTest(){
+        doReturn(Arrays.asList(homework)).when(mongoTemplateOperations).getHomeworksOfLoggedInTeacher();
+        assertEquals(Arrays.asList(homework), service.getHomeworksOfLoggedInTeacher());
+    }
+
+    @Test
+    @DisplayName("This deleteHomework service when homework exists")
+    void deleteHomeworkIfExistsTest(){
+        doReturn(Optional.ofNullable(homework)).when(homeworkRepositoryTest).findById(any(String.class));
+        assertEquals(homework, service.deleteHomework("test_id"));
+    }
+
+    @Test
+    @DisplayName("This deleteHomework service when homework does not exist")
+    void deleteHomeworkIfNotExistTest(){
+        doReturn(Optional.ofNullable(null)).when(homeworkRepositoryTest).findById(any(String.class));
+        assertEquals(null, service.deleteHomework("test_id"));
     }
 
 }
